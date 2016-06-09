@@ -9,8 +9,14 @@ hi = "I am a robot"
 senders = []
 rapidpro_value_key = []
 app = Flask(__name__)
-VERIFY_TOKEN = "Mek"
-ACCESS_TOKEN = "EAARFFY1xwc0BAG0I5EBZCQWB6frwKMCbz1XmZBduz0z5DwXKUZB0F2JE5rGt0b98SCuzBhC1cdjWBU4FKtqpqmY4PMBwNSKIZBv8VDxFpg3Wj7zxNRysVVTxSxZC4V9QG1GjQVjQOpZAs7YbaDGHXFyTAmYThBqBkz4uOrliCSDwZDZD"
+VERIFY_TOKEN = "[REPLACE WITH FACEBOOK VERIFY TOKEN]"
+ACCESS_TOKEN = "[REPLACE WITH FACEBOOK ACCCESS TOKEN]"
+
+app.config.from_object(__name__)
+app.config.from_envvar("HEALTHBOT_SETTINGS", silent=True)
+VERIFY_TOKEN = app.config["VERIFY_TOKEN"]
+ACCESS_TOKEN = app.config["ACCESS_TOKEN"]
+
 
 def reply(user_id):
     
@@ -26,6 +32,7 @@ def reply(user_id):
     resp = requests.post("https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN, json=data)
     print(resp.content)
 
+
 @app.route('/rapidpro', methods=['POST'])
 def handle_rapidpro_incoming_messages():
     datas = request.get_data().decode('utf-8')
@@ -36,6 +43,7 @@ def handle_rapidpro_incoming_messages():
     if (len(senders) >=1):
         reply(senders[0])
     return "ok"
+
 
 @app.route('/facebook', methods=['GET'])
 def handle_facebook_verification():
@@ -56,4 +64,5 @@ def handle_facebook_incoming_messages():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    app.logger.debug(VERIFY_TOKEN)
 
