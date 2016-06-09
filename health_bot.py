@@ -26,14 +26,8 @@ def reply(user_id):
     resp = requests.post("https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN, json=data)
     print(resp.content)
 
-@app.route('/rapidpro', methods=['GET'])
-def handle_verifications():
-    return request.method
-    print request.method
-
-
 @app.route('/rapidpro', methods=['POST'])
-def handle_incoming_messagess():
+def handle_rapidpro_incoming_messages():
     datas = request.get_data().decode('utf-8')
     length= len(eval(request.form["values"]))
     val = (eval(request.form["values"])[length-1]["label"])
@@ -44,7 +38,7 @@ def handle_incoming_messagess():
     return "ok"
 
 @app.route('/facebook', methods=['GET'])
-def handle_verification():
+def handle_facebook_verification():
     if request.args['hub.verify_token'] == VERIFY_TOKEN:
         return request.args['hub.challenge']
     else:
@@ -52,13 +46,14 @@ def handle_verification():
 
 
 @app.route('/facebook', methods=['POST'])
-def handle_incoming_messages():
+def handle_facebook_incoming_messages():
     data = request.json
     sender = data['entry'][0]['messaging'][0]['sender']['id']
     length = len(data['entry'][0]['messaging'])
     senders.append(sender)
     return "ok"
-    print senders[0]
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
