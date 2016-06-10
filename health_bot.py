@@ -52,6 +52,11 @@ def handle_facebook_incoming_messages():
     return "ok"
 
 
+@app.route('/')
+def index():
+    return "Sofia health bot."
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
     app.logger.debug(VERIFY_TOKEN)
