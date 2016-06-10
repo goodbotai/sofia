@@ -32,7 +32,7 @@ def handle_rapidpro_incoming_messages():
     val = (eval(request.form["values"])[length-1]["label"])
     rapidpro_value_key.append(val)
     if (len(senders) >= 1):
-        reply(senders[0])
+        reply(senders[len(senders)-1])
     return "ok"
 
 
