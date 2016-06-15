@@ -15,7 +15,7 @@ def reply(user_id):
     value = float(rapidpro_value_key[len(rapidpro_value_key)-1])/100
     float_value = "%0.2f" % value
     key = str(float_value)
-    path = "https://raw.githubusercontent.com/goodbotai/sofia/162d48b74401336155e99010261156a215a1b49f/"
+    path = "https://raw.githubusercontent.com/goodbotai/sofia/162d48b74401336155e99010261156a215a1b49f/"  # noqa
     url = path + key + ".png"
     data = {
         "recipient": {"id": user_id},
