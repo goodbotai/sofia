@@ -1,4 +1,4 @@
 #!/bin/bash
 git pull
-pip install -r requirements.pip
+pip install --upgrade pip && pip install -r requirements.pip
 python health_bot.py
