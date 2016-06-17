@@ -1,6 +1,6 @@
 from flask import Flask, request
 import requests
-senders = []
+import json
 rapidpro_value_key = []
 app = Flask(__name__)
 VERIFY_TOKEN = "[REPLACE WITH FACEBOOK VERIFY TOKEN]"
@@ -22,8 +22,7 @@ def reply(user_id):
         "message": {"attachment": {"type": "image", "payload": {"url": url}}}
     }
     API_url = "https://graph.facebook.com/v2.6/me/messages?access_token="
-    resp = requests.post(API_url + ACCESS_TOKEN, json=data)
-    print(resp.content)
+    requests.post(API_url + ACCESS_TOKEN, json=data)
 
 
 @app.route('/rapidpro', methods=['POST'])
@@ -31,8 +30,11 @@ def handle_rapidpro_incoming_messages():
     length = len(eval(request.form["values"]))
     val = (eval(request.form["values"])[length-1]["label"])
     rapidpro_value_key.append(val)
-    if (len(senders) >= 1):
-        reply(senders[len(senders)-1])
+    Run = request.form["run"]
+    response = requests.get('https://rapidpro.ona.io/api/v1/messages.json?run={}'.format(Run), headers={'Authorization': 'Token 6269bcaa1c78de11a12a52b2f280386439bff016'})
+    ID = json.loads(response.content)["results"][0]["urn"].split(":", 1)[1]
+    rapidpro_value_key.append(val)
+    reply(ID)
     return "ok"
 
 
@@ -46,9 +48,6 @@ def handle_facebook_verification():
 
 @app.route('/facebook', methods=['POST'])
 def handle_facebook_incoming_messages():
-    data = request.json
-    sender = data['entry'][0]['messaging'][0]['sender']['id']
-    senders.append(sender)
     return "ok"
 
 
