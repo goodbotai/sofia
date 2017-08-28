@@ -1,21 +1,23 @@
 # Sofia
 A survey bot for health
 
-
-# Overview
-
 ### Version 1
 Based on DMC-II spec. It's a series of Rapidpro flows.
 The flows are in the [rapidpro.ona.io] Sofia organisation and start from the
 Registration flow.
 
-The channels of use are:
+Channels:
 - Facebook Messenger
 - Telegram
 - SMS
 
+### Version 2
+Based on DMC-III spec. It's a series of borq/botkit conversations.
 
-# Metrics
+Channels:
+- Facebook Messenger
+
+## Metrics
 Metrics are based on questions, items and subscales.
 
 An `item` is made up of two questions. Each question has a maximum age and
@@ -46,37 +48,21 @@ Stop after 4 consecutive scores of 0 and go to the appropriate start point for
 the next subscale.
 
 
-# Differences between Version 1 and Version 2
+## Differences between Version 1 and Version 2
 Version 2 is just more questions on top of version 1.
 
 
-# Languages
+## Languages
 - English
-- Indonesian
+- Bahasa
 
 
-# Flows
-Flows are in the following sequence:
-### Version 1
-- Regsitration: to register new parents/kids.
-- Locomotor (section 5)
-- Fine motor (section 6)
-- Language (section 7)
+## Documentation
+ * [Spec](docs/Install.md)
+ * [Flows](docs/Persistence.md)
 
-### Version 2
-- Regsitration: to register new parents/kids.
-- Gross motor - this is the new name for Locomotor (section 5)
-- Fine motor (section 6)
-- Language (section 7)
 
-For more look at the specific doc for Flows.
-
-# Images
+## Images
 Why do we want to fetch the images from facebook and not a public place?
-
-# Spec
-Sofia version 2 is dependent on the DMC-III spec and uses rapidpro v2
-Look in spec/ folder for the raw xlsx specs.
-
 
 [rapidpro.ona.io]: https://rapidpro.ona.io

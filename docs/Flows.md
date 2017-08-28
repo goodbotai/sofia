@@ -1,3 +1,21 @@
+# Flows
+Flows are in the following sequence:
+
+## Version 1
+- Regsitration: to register new parents/kids.
+- Locomotor (section 5)
+- Fine motor (section 6)
+- Language (section 7)
+
+## Version 2
+- Regsitration: to register new parents/kids.
+- Gross motor - this is the new name for Locomotor (section 5)
+- Fine motor (section 6)
+- Language (section 7)
+
+For more look at the specific doc for Flows.
+
+
 ### Registration
 This flow registers new members.
 - First step, pick language.
