@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "test"
+    "lint": "./node_modules/eslint-config-google/node_modules/.bin/eslint sofia.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/goodbotai/sofia/issues"
   },
-  "homepage": "https://github.com/goodbotai/sofia#readme"
+  "homepage": "https://github.com/goodbotai/sofia#readme",
+  "dependencies": {
+    "borq": "file:../borq"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-google": "^0.9.1"
+  }
 }
