@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "lint": "./node_modules/eslint-config-google/node_modules/.bin/eslint sofia.js"
+    "lint": "./node_modules/eslint-config-google/node_modules/.bin/eslint sofia.js",
+    "dev": "supervisor sofia.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,12 @@
   },
   "homepage": "https://github.com/goodbotai/sofia#readme",
   "dependencies": {
-    "borq": "file:../borq"
+    "borq": "file:../borq",
+    "express-winston": "^2.4.0",
+    "i18next": "^9.0.0",
+    "i18next-express-middleware": "^1.0.5",
+    "i18next-node-fs-backend": "^1.0.0",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "eslint": "^4.5.0",
