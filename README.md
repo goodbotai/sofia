@@ -1,5 +1,5 @@
 # Sofia
-A survey bot for health
+A bot to track and access ECD progress.
 
 ### Version 1
 Based on DMC-II spec. It's a series of Rapidpro flows.

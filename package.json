@@ -1,0 +1,22 @@
+{
+  "name": "sofia",
+  "version": "0.0.1-alpha.1",
+  "description": "A bot to track and access ECD progress.",
+  "main": "sofia.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goodbotai/sofia.git"
+  },
+  "author": "onaio",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/goodbotai/sofia/issues"
+  },
+  "homepage": "https://github.com/goodbotai/sofia#readme"
+}
