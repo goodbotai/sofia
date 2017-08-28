@@ -1,6 +1,6 @@
-# sofia
-Sofia early childhood development bot
+# Sofia
+Sofia early childhood development bot.
 
-# install requirements
 
-    $ pip install -r requirements.pip
+# Documentation
+Look for documentation in the docs/ directory.
