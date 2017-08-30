@@ -10,7 +10,7 @@ const Backend = require('i18next-node-fs-backend');
 const lang = 'en';
 
 const {
-  facebook,
+  facebookBot,
   facebookUtils,
   services,
   config,
@@ -18,11 +18,12 @@ const {
 
 const {
   goto,
+  nextConversation,
   extractLanguageFromLocale,
-  generateYesNoButtonTemplate,
+  generateButtonTemplate,
 } = facebookUtils;
 
-const sofia = facebook.spawn({});
+const sofia = facebookBot.spawn({});
 
 // To remove
 const childName = "Baby Boo";
@@ -63,7 +64,7 @@ i18next
   });
 
 
-facebook.setupWebserver(config.PORT, (err, webserver) => {
+facebookBot.setupWebserver(config.PORT, (err, webserver) => {
   if (config.environment === 'production') {
     webserver.use(services.sentry.requestHandler());
   }
@@ -77,7 +78,7 @@ facebook.setupWebserver(config.PORT, (err, webserver) => {
       })],
   }));
 
-  facebook.createWebhookEndpoints(webserver, sofia, () => {
+  facebookBot.createWebhookEndpoints(webserver, sofia, () => {
   });
 
   webserver.get('/', (req, res) => {
@@ -99,31 +100,110 @@ facebook.setupWebserver(config.PORT, (err, webserver) => {
 
 
 function sofiaECD(err, convo, language) {
-  convo.addQuestion(
-    generateYesNoButtonTemplate(i18next.t(`${language}:withSomeone`),
-                                i18next.t(`${language}:yes`),
-                                i18next.t(`${language}:no`),
-                                'yes_with_someone',
-                                'no_with_someone'),
-    [{
-      pattern: 'yes_with_someone',
-      callback: goto('with whom name'),
-    }, {
-      pattern: 'no_with_someone',
-      callback: goto('skip yes'),
-    }],
-      {key: 'with_someone'});
+}
+
+function fci(err, convo, language) {
+}
+
+function srq20(err, convo, language) {
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.headaches`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.appetite`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.sleepBadly`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.easilyFrightened`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.handsShake`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.feelNervous`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.poorDigestion`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.clearThought`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.feelHappy`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.cry`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.difficultyEnjoying`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.difficultyDecisions`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.workSuffering`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.useful`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.lostInterest`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.feelWorthless`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+    convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.suicidal`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.feelWorthless`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+    convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.alwaysTired`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+  convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.easilyTired`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+    convo.addQuestion(generateButtonTemplate(i18next.t(`${lang}:SRQ20.stomachDiscomfort`),
+                                           i18next.t(`${lang}:generic.yes`),
+                                           i18next.t(`${lang}:generic.no`)),
+                    nextConversation);
+}
+
+function caregiverKnowledge(err, convo, language) {
 }
 
 function pickConversation(err, convo) {
-  sofiaECD(err, convo, lang);
+  srq20(err, convo, lang);
 }
 
 /* Messenger Karma configs */
-//facebook.karma.api.messenger_profile.greeting('I will ask you questions about' +
+//facebookBot.karma.api.messenger_profile.greeting('I will ask you questions about' +
 //                                     ' your daily well-being.');
-//facebook.karma.api.messenger_profile.get_started('get_started');
-facebook.api.messenger_profile.menu([{
+//facebookBot.karma.api.messenger_profile.get_started('get_started');
+facebookBot.api.messenger_profile.menu([{
   locale: 'default',
   composer_input_disabled: false,
   call_to_actions: [
@@ -151,7 +231,6 @@ facebook.api.messenger_profile.menu([{
           type: 'postback',
           payload: 'in',
         },
-
       ],
     },
     {
@@ -165,9 +244,12 @@ facebook.api.messenger_profile.menu([{
 ]);
 
 // Listeners
-facebook.on('facebook_postback', (bot, message) => {
+facebookBot.on('facebook_postback', (bot, message) => {
   const {payload} = message;
-  if (payload === 'get_started') {
+  if (['restart',
+       'get_started',
+       'fYes'].includes(payload)) {
+    console.log("wut");
     bot.createConversation(message, pickConversation);
   }  else if (['en', 'in'].includes(payload)) {
     bot.reply(message,  i18next.t(`${payload}:languageChangeText`));
@@ -176,36 +258,32 @@ facebook.on('facebook_postback', (bot, message) => {
   }
 });
 
-facebook.hears(['restart', 'restart survey'],
+facebookBot.hears(['restart', 'restart survey'],
                'message_received',
                function(bot, message) {
-                 bot.createConversation(message, pickConversation);
+                 bot.startConversation(message, pickConversation);
                });
 
-facebook.hears(['👋', 'hello', 'hi', 'tally'],
+facebookBot.hears(['👋', 'hello', 'hi', 'tally'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
-                           generateYesNoButtonTemplate(i18next.t(`${lang}:helpMessage`),
-                                                       i18next.t(`${lang}:yes`),
-                                                       i18next.t(`${lang}:no`),
-                                                       'restart',
-                                                       'noQuit'));
+                           generateButtonTemplate(i18next.t(`${lang}:generic.helpMessage`),
+                                                  i18next.t(`${lang}:generic.yes`),
+                                                  i18next.t(`${lang}:generic.no`)));
                });
 
-facebook.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
+facebookBot.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
-                            generateYesNoButtonTemplate(i18next.t(`${lang}:quitMessage`),
-                                                        i18next.t(`${lang}:yes`),
-                                                        i18next.t(`${lang}:no`),
-                                                        'yesQuit',
-                                                        'noQuit'));
+                           generateButtonTemplate(i18next.t(`${lang}:generic.quitMessage`),
+                                                  i18next.t(`${lang}:generic.yes`),
+                                                  i18next.t(`${lang}:generic.no`)));
                });
 
-facebook.hears([/([a-z])\w+/i],
+facebookBot.hears([/([a-z])\w+/i],
                'message_received',
                function(bot, message) {
-                 bot.reply(message, i18next.t(`${lang}:idk`));
+                 bot.reply(message, i18next.t(`${lang}:generic.idkw`));
                });
