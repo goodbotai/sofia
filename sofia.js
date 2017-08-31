@@ -66,7 +66,6 @@ i18next
     },
   });
 
-
 facebookBot.setupWebserver(config.PORT, (err, webserver) => {
   if (config.environment === 'production') {
     webserver.use(services.sentry.requestHandler());
@@ -81,19 +80,11 @@ facebookBot.setupWebserver(config.PORT, (err, webserver) => {
       })],
   }));
 
-  facebookBot.createWebhookEndpoints(webserver, sofia, () => {
-  });
+  facebookBot.createWebhookEndpoints(webserver, sofia, () => {});
 
   webserver.get('/', (req, res) => {
     const html = '<h3>This is karma</h3>';
     res.send(html);
-  });
-
-  webserver.post('/trigger', (req, res) => {
-    // sendGreeting(req.body);
-    const response = res;
-    response.statusCode = 200;
-    response.send();
   });
 
   if (config.environment === 'production') {
@@ -187,12 +178,20 @@ function pickConversation(err, convo) {
   fci(err, convo);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
+
+  convo.on('end',function(convo) {
+    if (convo.status=='completed') {
+      // send to Ona
+    } else if (convo.status=='interrupted') {
+      // notify them
+      // send to Ona
+    }});
 }
 
-/* Messenger Karma configs */
-// facebookBot.karma.api.messenger_profile.greeting('I will ask you questions' +
-//                                     ' about your daily well-being.');
-// facebookBot.karma.api.messenger_profile.get_started('get_started');
+// Messenger configs
+facebookBot.api.messenger_profile.greeting( 'Sofia is here to help with' +
+                                                  ' your ECD needs.');
+facebookBot.api.messenger_profile.get_started('get_started');
 facebookBot.api.messenger_profile.menu([{
   locale: 'default',
   composer_input_disabled: false,
@@ -235,7 +234,7 @@ facebookBot.api.messenger_profile.menu([{
 
 // Listeners
 facebookBot.on('facebook_postback', (bot, message) => {
-  const {payload} = message;
+  const {payload, referral: {ref}} = message;
   if (['restart',
        'get_started'].includes(payload)) {
     bot.startConversation(message, pickConversation);
