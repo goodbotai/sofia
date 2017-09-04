@@ -48,6 +48,12 @@ const availableLanguages = [
   },
 ];
 
+const lookupISO6392code = {
+  en: 'eng',
+  pt: 'por',
+  in: 'ind',
+};
+
 i18next
   .use(middleware.LanguageDetector)
   .use(Backend)
@@ -175,17 +181,25 @@ function pickConversation(err, convo) {
       pattern: 'CAREGIVER KNOWLEDGE',
       callback: goto('caregiver knowledge'),
     }]);
+
   fci(err, convo);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
 
-  convo.on('end',function(convo) {
+  convo.on('end', function(convo) {
     if (convo.status=='completed') {
+      winston.log('info', 'DONE: ...');
       // send to Ona
     } else if (convo.status=='interrupted') {
       // notify them
       // send to Ona
-    }});
+    }
+});
+
+  convo.onTimeout((convo) => {
+    convo.say('Oh no! You took too long to respond.');
+    winston.log('info', 'TIMEOUT: ...');
+});
 }
 
 // Messenger configs
@@ -232,11 +246,18 @@ facebookBot.api.messenger_profile.menu([{
 },
 ]);
 
+
 // Listeners
 facebookBot.on('facebook_postback', (bot, message) => {
-  const {payload, referral: {ref}} = message;
+  const {payload} = message;
   if (['restart',
        'get_started'].includes(payload)) {
+    if (message.referral) {
+      services.genAndPostRapidproContact(config.rapidproGroups,
+                                         lookupISO6392code[lang],
+                                         message.user,
+                                         {opensrp_id: message.referral.ref});
+    }
     bot.startConversation(message, pickConversation);
   } else if (['en', 'in'].includes(payload)) {
     bot.reply(message, i18next.t(`${payload}:languageChangeText`));
