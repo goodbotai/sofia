@@ -6,7 +6,8 @@
     "idkw": "I don't know that word yet.",
     "yes": "Yes",
     "no": "No",
-    "idk": "I don't know"
+    "idk": "I don't know",
+    "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\"."
   },
   "caregiverKnowledge": {
     "intro": "Now, I will ask you some things about children ane when you think they start to do things.",

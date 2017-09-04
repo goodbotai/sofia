@@ -194,12 +194,15 @@ function pickConversation(err, convo) {
       // notify them
       // send to Ona
     }
-});
+  });
 
   convo.onTimeout((convo) => {
-    convo.say('Oh no! You took too long to respond.');
-    winston.log('info', 'TIMEOUT: ...');
-});
+    convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`), 'timeout message');
+    convo.gotoThread('timeout message');
+    //convo.stop('timeout');
+    winston.log('info', '>   [TIMEOUT] ...');
+
+  });
 }
 
 // Messenger configs
@@ -272,7 +275,7 @@ facebookBot.hears(['restart', 'restart survey'],
                  bot.startConversation(message, pickConversation);
                });
 
-facebookBot.hears(['👋', 'hello', 'hi', 'tally'],
+facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'tally'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
