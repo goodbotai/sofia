@@ -1,4 +1,5 @@
 const borq = require('borq');
+var fs = require('fs');
 
 const winston = require('winston');
 const expressWinston = require('express-winston');
@@ -22,6 +23,7 @@ const {
   generateQuickReply,
   extractLanguageFromLocale,
   generateButtonTemplate,
+  genAndPostSubmissionToOna,
 } = facebookUtils;
 
 const sofia = facebookBot.spawn({});
@@ -98,25 +100,29 @@ facebookBot.setupWebserver(config.PORT, (err, webserver) => {
   }
 });
 
+const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
+
 /**
 * The FCI conversation
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
 */
 function fci(err, convo) {
-  const fciQuestionKeys = ['playWithHomemadeToys',
-                           'playWithShopToys',
-                           'playHouseholdObjects'];
+  const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
-    return convo.addQuestion(
+    if (/intro./.test(key)) {
+      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
+      return goto('fci');
+    } else {
+      return convo.addQuestion(
       generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName}),
                              [i18next.t(`${lang}:generic.yes`),
                               i18next.t(`${lang}:generic.no`),
                               i18next.t(`${lang}:generic.idk`)]),
       nextConversation,
-      {},
+      {key: 'fci_' + key},
       'fci');
-  });
+    }});
 }
 
 /**
@@ -125,18 +131,20 @@ function fci(err, convo) {
 * @param {object} convo a conversation object
 */
 function srq20(err, convo) {
-  const srq20QuestionKeys = ['headaches',
-                             'appetite',
-                             'sleepBadly'];
+  const srq20QuestionKeys = Object.keys(enTranslation.SRQ20);
   srq20QuestionKeys.map((key) => {
-    return convo.addQuestion(
-      generateButtonTemplate(i18next.t(`${lang}:SRQ20.${key}`),
-                             [i18next.t(`${lang}:generic.yes`),
-                              i18next.t(`${lang}:generic.no`)]),
-      nextConversation,
-      {},
-      'srq 20');
-  });
+    if (/intro./.test(key)) {
+      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
+      return goto('srq 20');
+    } else {
+      return convo.addQuestion(
+        generateButtonTemplate(i18next.t(`${lang}:SRQ20.${key}`),
+                               [i18next.t(`${lang}:generic.yes`),
+                                i18next.t(`${lang}:generic.no`)]),
+        nextConversation,
+        {},
+        'srq 20');
+    }});
 }
 
 /**
@@ -145,11 +153,13 @@ function srq20(err, convo) {
 * @param {object} convo a conversation object
 */
 function caregiverKnowledge(err, convo) {
-  const caregiverKnowledgeQuestionKeys = ['brainDevelopment',
-                                          'sight',
-                                          'follow'];
+  const caregiverKnowledgeQuestionKeys = Object.keys(enTranslation.caregiverKnowledge);
   caregiverKnowledgeQuestionKeys.map((key) => {
-    return convo.addQuestion(
+    if (/intro./.test(key)) {
+      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
+      return goto('caregiver knowledge');
+    } else {
+      return convo.addQuestion(
       generateQuickReply(i18next.t(`${lang}:caregiverKnowledge.${key}`),
                          [i18next.t(`${lang}:caregiverKnowledge.birth`),
                           i18next.t(`${lang}:caregiverKnowledge.2`),
@@ -159,7 +169,7 @@ function caregiverKnowledge(err, convo) {
       nextConversation,
       {},
       'caregiver knowledge');
-  });
+    }});
 }
 
 /**
@@ -187,21 +197,19 @@ function pickConversation(err, convo) {
   caregiverKnowledge(err, convo);
 
   convo.on('end', function(convo) {
-    if (convo.status=='completed') {
-      winston.log('info', 'DONE: ...');
+    if (convo.status=='completed' || convo.status=='interrupted') {
+      genAndPostSubmissionToOna(convo);
+      winston.log('info', ' ...');
       // send to Ona
-    } else if (convo.status=='interrupted') {
-      // notify them
-      // send to Ona
+      // update language in rapidpro
     }
   });
 
   convo.onTimeout((convo) => {
-    convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`), 'timeout message');
+    convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`),
+                     'timeout message');
     convo.gotoThread('timeout message');
-    //convo.stop('timeout');
     winston.log('info', '>   [TIMEOUT] ...');
-
   });
 }
 
