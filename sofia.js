@@ -119,8 +119,8 @@ function fci(err, convo) {
                              [i18next.t(`${lang}:generic.yes`),
                               i18next.t(`${lang}:generic.no`),
                               i18next.t(`${lang}:generic.idk`)]),
-      nextConversation,
-      {key: 'fci_' + key},
+        nextConversation,
+        {key},
       'fci');
     }});
 }
@@ -283,7 +283,7 @@ facebookBot.hears(['restart', 'restart survey'],
                  bot.startConversation(message, pickConversation);
                });
 
-facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'tally'],
+facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai', 'tally'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
