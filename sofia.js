@@ -1,5 +1,5 @@
 const borq = require('borq');
-var fs = require('fs');
+let fs = require('fs');
 
 const winston = require('winston');
 const expressWinston = require('express-winston');
@@ -23,7 +23,6 @@ const {
   generateQuickReply,
   extractLanguageFromLocale,
   generateButtonTemplate,
-  genAndPostSubmissionToOna,
 } = facebookUtils;
 
 const sofia = facebookBot.spawn({});
@@ -120,13 +119,14 @@ function fci(err, convo) {
                                [{title: i18next.t(`${lang}:generic.yes`),
                                  payload: 'yes'},
                                 {title: i18next.t(`${lang}:generic.no`),
-                                 payload:  'no'},
+                                 payload: 'no'},
                                 {title: i18next.t(`${lang}:generic.idk`),
-                                 payload: 'idk'},]),
+                                 payload: 'idk'}]),
         nextConversation,
         {key},
         'fci');
-    }});
+    }
+});
 }
 
 /**
@@ -148,7 +148,8 @@ function srq20(err, convo) {
         nextConversation,
         {},
         'srq 20');
-    }});
+    }
+});
 }
 
 /**
@@ -175,7 +176,8 @@ function caregiverKnowledge(err, convo) {
       nextConversation,
       {},
       'caregiver knowledge');
-    }});
+    }
+});
 }
 
 /**
@@ -200,14 +202,15 @@ function pickConversation(err, convo) {
     {key: 'survey'});
 
   fci(err, convo);
-  //srq20(err, convo);
-  //caregiverKnowledge(err, convo);
+  srq20(err, convo);
+  caregiverKnowledge(err, convo);
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
       winston.log('info', `>   [${convo.status}] ...`);
       services.genAndPostSubmissionToOna(convo);
-    }});
+    }
+});
 
   convo.onTimeout((convo) => {
     convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`),
