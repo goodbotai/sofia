@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint sofia.js",
-    "dev": "supervisor sofia.js"
+    "dev": "supervisor sofia.js",
+    "travis-ecs-deploy": "travis-ecs-deploy"
   },
   "repository": {
     "type": "git",
