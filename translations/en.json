@@ -7,7 +7,11 @@
     "yes": "Yes",
     "no": "No",
     "idk": "I don't know",
-    "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\"."
+    "sometimes": "Sometimes",
+    "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\".",
+    "major":"This is always a major issue.",
+    "minor": "This is a mild issue.",
+    "nonIssue": "This is not an issue."
   },
   "caregiverKnowledge": {
     "intro": "Now, I will ask you some things about children ane when you think they start to do things.",
@@ -209,5 +213,42 @@
   "7.31": "Does {{{childName}}} know quantities up to 5?",
   "7.32": "Can {{{childName}}} answer which one does not belong for 1 or more of the following questions? Say to the child: “I’m going to say four words. One does not belong. Listen and then tell me the word that does not belong.” “Chocolate, sugar, chalk, bread.” Did the child say “chalk”?\n Try again with these: “Bathroom, train, kitchen, bedroom.” Did the child say “train”?\n Try again with these: “Brother, helper, ladder, neighbor.” Did the child say “ladder”?",
    "7.33": "Can {{{childName}}} answer which one does not belong for all 3 of the following questions? Say to the child: “I’m going to say four words. One does not belong. Listen and then tell me the word that does not belong.” “Chocolate, sugar, chalk, bread.” Did the child say “chalk”?\n Try again with these: “Bathroom, train, kitchen, bedroom.” Did the child say “train”?\n Try again with these: “Brother, helper, ladder, neighbor.” Did the child say “ladder”?"
- }
+  },
+  "PSED": {
+    "intro1": "Now, I will ask you about your child's behavior. ",
+    "intro2": "These behaviors are often normal for young children, so please respond honestly. There are no right or wrong answers.",
+    "intro3": "If you feel unsure about a question, please give the best answer you can. I want to reassure you that your answers are confidential.",
+    "refuseFood": "Does [NAME] refuse to eat?",
+    "troubleSleeping": "Does [NAME] have trouble falling asleep?",
+    "quarrelsome": "Is [NAME] quarrelsome?",
+    "play": "Does [NAME] play well with other children (not including siblings)?",
+    "hit": "Does [NAME] hit, shove, kick, or bite children (not including siblings)?",
+    "showJealousy": "Does [NAME] show jealousy?",
+    "share": "Does [NAME] share, for example food, space, clothes, or toys?",
+    "cryLeaving": "Does [NAME] cry or hang on to you when you try to leave?",
+    "troubleChanging": "Does [NAME] have trouble adjusting to changes, for example, changing houses, changing sleeping place, new clothes, new friends, or anything outside the normal routine?",
+    "independent": "Does [NAME] demand help for things that he/she can do for him/herself?",
+    "followRules": "Does [NAME] follow rules (complies with adult expectations and requests)?",
+    "upset": "Does [NAME] often get very upset or angry?",
+    "destructive": "Is [NAME] destructive. Breaks or ruins things on purpose?",
+    "hitAdults": "Does [NAME] hit, bite, or kick you (or other adult)?",
+    "tantrums": "Does [NAME] cry or have tantrums until he or she is exhausted?",
+    "lookForWhenUpset": "Does [NAME] look for you (or other parent) when upset?",
+    "restless": "Is [NAME] restless and can't sit still?",
+    "payAttention": "Can [NAME] pay attention for a long time (other than when watching a video)?",
+    "waitTurn": "When playing a game or sharing a toy, can [NAME] wait for his or her turn?",
+    "afraid": "Is [NAME] afraid of certain places, animals, or things?",
+    "affectionate": "Is [NAME] affectionate with loved ones?",
+    "eatUnedible": "Does [NAME] eat or drink things that are not edible (like paper or paint)?",
+    "unaware": "Is [NAME] ever totally unaware of what is happening around him or her?",
+    "noEyeContact": "Does [NAME] not make eye contact?",
+    "freeze": "Does [NAME] when upset, get very still, freeze, or doesn’t move?",
+    "nervous": "Does [NAME] seem nervous, tense, or fearful?",
+    "worry": "Does [NAME] worry and is very serious?",
+    "tryToHelp": "Does [NAME] try to help when someone is hurt (for example, gives toy)?",
+    "unhappy": "Does [NAME] seem very unhappy, sad, depressed, or withdrawn?",
+    "putInOrder": "Does [NAME] put things in a special order over and over and gets upset if he or she is interrupted?",
+    "repeatAction": "Does [NAME] repeat the same action or phrase over and over without enjoyment?",
+    "repeatMovement": "Does [NAME] repeat a particular movement over and over (like rocking, spinning)?"
+  }
 }
