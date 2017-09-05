@@ -115,13 +115,17 @@ function fci(err, convo) {
       return goto('fci');
     } else {
       return convo.addQuestion(
-      generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName}),
-                             [i18next.t(`${lang}:generic.yes`),
-                              i18next.t(`${lang}:generic.no`),
-                              i18next.t(`${lang}:generic.idk`)]),
+        generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName}),
+                               null,
+                               [{title: i18next.t(`${lang}:generic.yes`),
+                                 payload: 'yes'},
+                                {title: i18next.t(`${lang}:generic.no`),
+                                 payload:  'no'},
+                                {title: i18next.t(`${lang}:generic.idk`),
+                                 payload: 'idk'},]),
         nextConversation,
         {key},
-      'fci');
+        'fci');
     }});
 }
 
@@ -134,7 +138,7 @@ function srq20(err, convo) {
   const srq20QuestionKeys = Object.keys(enTranslation.SRQ20);
   srq20QuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
+      convo.addMessage(i18next.t(`${lang}:SRQ20.${key}`), 'srq 20');
       return goto('srq 20');
     } else {
       return convo.addQuestion(
@@ -153,10 +157,12 @@ function srq20(err, convo) {
 * @param {object} convo a conversation object
 */
 function caregiverKnowledge(err, convo) {
-  const caregiverKnowledgeQuestionKeys = Object.keys(enTranslation.caregiverKnowledge);
+  const caregiverKnowledgeQuestionKeys = Object.keys(
+    enTranslation.caregiverKnowledge);
   caregiverKnowledgeQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
+      convo.addMessage(i18next.t(`${lang}:caregiverKnowledge.${key}`),
+                       'caregiver knowledge');
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
@@ -190,20 +196,18 @@ function pickConversation(err, convo) {
     }, {
       pattern: 'CAREGIVER KNOWLEDGE',
       callback: goto('caregiver knowledge'),
-    }]);
+    }],
+    {key: 'survey'});
 
   fci(err, convo);
-  srq20(err, convo);
-  caregiverKnowledge(err, convo);
+  //srq20(err, convo);
+  //caregiverKnowledge(err, convo);
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
-      genAndPostSubmissionToOna(convo);
-      winston.log('info', ' ...');
-      // send to Ona
-      // update language in rapidpro
-    }
-  });
+      winston.log('info', `>   [${convo.status}] ...`);
+      services.genAndPostSubmissionToOna(convo);
+    }});
 
   convo.onTimeout((convo) => {
     convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`),
@@ -283,7 +287,7 @@ facebookBot.hears(['restart', 'restart survey'],
                  bot.startConversation(message, pickConversation);
                });
 
-facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai', 'tally'],
+                 facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai', 'tally'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
