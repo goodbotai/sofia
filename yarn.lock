@@ -477,8 +477,9 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-"borq@file:../borq":
-  version "0.0.1-alpha.8"
+borq@^0.0.1-alpha.12:
+  version "0.0.1-alpha.12"
+  resolved "https://registry.yarnpkg.com/borq/-/borq-0.0.1-alpha.12.tgz#01dbc9473167256703d8a12e2085d65d8ee107f9"
   dependencies:
     botkit "^0.5.7"
     express-winston "^2.4.0"
