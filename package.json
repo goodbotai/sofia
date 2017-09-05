@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "lint": "./node_modules/eslint-config-google/node_modules/.bin/eslint sofia.js",
+    "lint": "./node_modules/.bin/eslint sofia.js",
     "dev": "supervisor sofia.js"
   },
   "repository": {
