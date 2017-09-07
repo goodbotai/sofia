@@ -7,7 +7,7 @@
     "yes": "Ya",
     "no": "Tidak",
     "idk": "Saya tidak tahu",
-    "timeoutMessage": "Percakapan telah berakhir karena Anda tidak membalas dalama waktu 20 menit. Anda bisa memulai percakapan kembali dengan \"halo\" atau \"hai\".",
+    "timeoutMessage": "Percakapan telah berakhir karena Anda tidak membalas dalama waktu 20 menit. Anda bisa memulai percakapan kembali dengan \"halo\" atau \"hai\"."
   },
   "caregiverKnowledge": {
     "intro": "Sekarang, saya akan menanyakan beberapa hal tentang anak-anak dan kapan menurut Anda mereka mulai melakukan sesuatu.",
@@ -73,8 +73,8 @@
     "caregiverOuting": "Apakah pengasuh lain berumur di atas 15 tahun pernah mengajak {{{childName}}} tamasya?",
     "play": "Dalam 3 hari terakhir, apakah seseorang pernah bermain dengan {{{childName}}}?",
     "motherPlay": "Apakah ibu {{{childName}}} pernah bermain dengan {{{childName}}}?",
-    "fatherPlay": ""Apakah ayah {{{childName}}} pernah bermain dengan {{{childName}}}",
-    "caregiverPlay": ""Apakah pengasuh lain berumur di atas 15 tahun pernah bermain dengan {{{childName}}}?",
+    "fatherPlay": "Apakah ayah {{{childName}}} pernah bermain dengan {{{childName}}}",
+    "caregiverPlay": "Apakah pengasuh lain berumur di atas 15 tahun pernah bermain dengan {{{childName}}}?",
     "NAMAountOrDraw": "Dalam 3 hari terakhir, apakah seseorang pernah menyebut nama, menghitung atau menggambar benda dengan {{{childName}}}?",
     "motherNAMAountOrDraw": "Apakah ibu {{{childName}}} pernah menyebut nama, menghitung atau menggambar benda dengan {{{childName}}}?",
     "fatherNAMAountOrDraw": "Apakah ayah {{{childName}}} pernah menyebut nama, menghitung atau menggambar benda dengan {{{childName}}}?",
@@ -117,9 +117,9 @@
 
     "zzz": "Apakah {{{childName}}} dapat melakukan ini secara terus-menerus selama sebulan terakhir?",
 
-  "5.1": "Apakah {{{childName}}} dapat mengangkat kepalanya minimal selama 5 detik?",
-  "5.1y": "Ketika sedang memegang anak Anda, Anda tidak perlu menopang kepalanya dengan tangan Anda. Anak mampu mengangkat kepalanya sendiri minimal selama 5 detik.",
-  "5.1n": "Anda harus terus-menerus menopang kepala anak. Anak hanya mampu mengangkat kepalanya sendiri selama kurang dari 5 detik.",
+    "5.1": "Apakah {{{childName}}} dapat mengangkat kepalanya minimal selama 5 detik?",
+    "5.1y": "Ketika sedang memegang anak Anda, Anda tidak perlu menopang kepalanya dengan tangan Anda. Anak mampu mengangkat kepalanya sendiri minimal selama 5 detik.",
+    "5.1n": "Anda harus terus-menerus menopang kepala anak. Anak hanya mampu mengangkat kepalanya sendiri selama kurang dari 5 detik.",
 
 
   "5.2": "Apakah {{{childName}}} mampu mengangkat kepalanya tanpa bantuan dan menolehkan kepalanya ke kiri dan ke kanan?",
@@ -169,8 +169,8 @@
   "6.20": "Apakah {{{childName}}} mampu menulis 1 atau lebih angka ketika Anda memintanya, tanpa dicontohkan terlebih dahulu?",
   "6.21": "Apakah {{{childName}}} mampu menulis 2 atau lebih angka ketika Anda memintanya, tanpa dicontohkan terlebih dahulu??",
   "6.22": "Apakah {{{childName}}} mampu menulis 3 atau lebih angka ketika Anda memintanya, tanpa dicontohkan terlebih dahulu?",
-  "6.23": "Apakah {{{childName}}} mampu menulis 1-2 huruf secara berurutan setelah "A" (B atau B C), tanpa diberitahukan huruf selanjutnya?",
-  "6.24": "Apakah {{{childName}}} mampu menulis 3 atau lebih huruf secara berurutan setelah "A" (B, C, D, dst.), tanpa diberitahukan huruf selanjutny? ",
+  "6.23": "Apakah {{{childName}}} mampu menulis 1-2 huruf secara berurutan setelah \"A\" (B atau B C), tanpa diberitahukan huruf selanjutnya?",
+  "6.24": "Apakah {{{childName}}} mampu menulis 3 atau lebih huruf secara berurutan setelah \"A\" (B, C, D, dst.), tanpa diberitahukan huruf selanjutny? ",
   "6.25": "Apakah {{{childName}}} mampu menulis 1 atau lebih kata dengan ejaan yang benar tanpa dicontohkan terlebih dahulu?",
   "6.26": "Apakah {{{childName}}} mampu menulis 2 atau lebih kata dengan ejaan yang benar tanpa dicontohkan terlebih dahulu?",
   "6.27":"Apakah {{{childName}}} mampu menulis 4 atau lebih kata dengan ejaan yang benar tanpa dicontohkan terlebih dahulu?",
@@ -206,7 +206,7 @@
 
   "7.30": "Apakah {{{childName}}} mengenal angka 1, 2, dan 3?",
   "7.31": "Apakah {{{childName}}} mengenal angka sampai 5?",
-  "7.32": "Apakah {{{childName}}} mampu menjawab 1 atau lebih pertanyaan "mana yang bukan termasuk dari"? Katakan kepada anak: “Saya akan menyebutkan 4 kata. Satu kata tidak termasuk kategori yang sama dengan 3 kata lainnya. Dengarkan dan kasih tahu saya mana kata yang berbeda tersebut.” “Cokelat, gula, kapur, roti.” Apakah anak menjawab “kapur”?\n Coba lagi dengan pertanyaan ini: “Kamar mandi, kereta, dapur, kamar tidur.” Apakah anak menjawab “kereta”?\n Coba lagi dengan pertanyaan lain: “Saudara laki-laki, pembantu, tangga, tetangga.” Apakah anak menjawab “tangga”?",
-   "7.33": "Apakah {{{childName}}} mampu menjawab ketiga pertanyaan "mana yang bukan termasuk dari"? Katakan kepada anak: “Saya akan menyebutkan 4 kata. Satu kata tidak termasuk kategori yang sama dengan 3 kata lainnya. Dengarkan dan kasih tahu saya mana kata yang berbeda tersebut.” “Cokelat, gula, kapur, roti.” Apakah anak menjawab “kapur”?\n Coba lagi dengan pertanyaan ini: “Kamar mandi, kereta, dapur, kamar tidur.” Apakah anak menjawab “kereta”?\n Coba lagi dengan pertanyaan lain: “Saudara laki-laki, pembantu, tangga, tetangga.” Apakah anak menjawab “tangga”?","
+  "7.32": "Apakah {{{childName}}} mampu menjawab 1 atau lebih pertanyaan \"mana yang bukan termasuk dari\"? Katakan kepada anak: “Saya akan menyebutkan 4 kata. Satu kata tidak termasuk kategori yang sama dengan 3 kata lainnya. Dengarkan dan kasih tahu saya mana kata yang berbeda tersebut.” “Cokelat, gula, kapur, roti.” Apakah anak menjawab \"kapur\"?\n Coba lagi dengan pertanyaan ini: “Kamar mandi, kereta, dapur, kamar tidur.” Apakah anak menjawab “kereta”?\n Coba lagi dengan pertanyaan lain: “Saudara laki-laki, pembantu, tangga, tetangga.” Apakah anak menjawab “tangga”?",
+   "7.33": "Apakah {{{childName}}} mampu menjawab ketiga pertanyaan \"mana yang bukan termasuk dari\"? Katakan kepada anak: “Saya akan menyebutkan 4 kata. Satu kata tidak termasuk kategori yang sama dengan 3 kata lainnya. Dengarkan dan kasih tahu saya mana kata yang berbeda tersebut.” “Cokelat, gula, kapur, roti.” Apakah anak menjawab \"kapur\"?\n Coba lagi dengan pertanyaan ini: “Kamar mandi, kereta, dapur, kamar tidur.” Apakah anak menjawab “kereta”?\n Coba lagi dengan pertanyaan lain: “Saudara laki-laki, pembantu, tangga, tetangga.” Apakah anak menjawab “tangga”?,"
  }
 }

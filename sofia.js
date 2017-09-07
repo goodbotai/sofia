@@ -44,7 +44,7 @@ const availableLanguages = [
     name: 'English',
   },
   {
-    locale: 'pt_BR',
+    locale: 'in_ID',
     name: 'Portuguese',
   },
 ];
