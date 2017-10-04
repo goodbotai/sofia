@@ -8,70 +8,71 @@ const i18next = require('i18next');
 const middleware = require('i18next-express-middleware');
 const Backend = require('i18next-node-fs-backend');
 
-const lang = 'en';
-
 const {
-  facebookBot,
   facebookUtils,
+  facebookBot,
   services,
   config,
+  http,
+  localeUtils,
 } = borq;
 
 const {
-  goto,
   nextConversation,
-  generateQuickReply,
-  extractLanguageFromLocale,
+  goto,
   generateButtonTemplate,
+  generateQuickReply,
+  sendMessage,
 } = facebookUtils;
 
+const lang = config.defaultLanguage;
 const sofia = facebookBot.spawn({});
 
 // To remove
 const childName = 'Baby Boo';
+const genderPronoun = 'she';
 /*
 const mockChild = {
   momId: 1234,
   childID: 4321,
+  gender: female,
   childName,
   motherSMSnumber: 254722124323,
 };
 */
 
-const availableLanguages = [
-  {
-    locale: 'en_US',
-    name: 'English',
-  },
-  {
-    locale: 'in_ID',
-    name: 'Portuguese',
-  },
-];
+function getNs (langs) {
+  return localeUtils.languages.filter((e) => {
+    return langs.includes(e.iso6391);
+  });
+}
 
-const lookupISO6392code = {
-  en: 'eng',
-  pt: 'por',
-  in: 'ind',
+const i18nextOptions = {
+  debug: config.debugTranslations,
+  ns: getNs(['en', 'in']).map(({iso6391}) => iso6391),   // the function call is repititve
+  defaultNS: config.defaultLanguage,
+  fallbackLng: config.defaultLanguage,
+  backend: {
+    loadPath: 'translations/{{{ns}}}.json',
+  },
+  interpolation: {
+    prefix: '{{{',
+    suffix: '}}}',
+  },
 };
 
 i18next
-  .use(middleware.LanguageDetector)
   .use(Backend)
-  .init({
-    preload: ['en', 'in'],
-    ns: availableLanguages.map(({locale}) => extractLanguageFromLocale(locale)),
-    debug: config.debugTranslations,
-    defaultNS: 'en', // config.defaultLanguage,
-    fallbackLng: 'en', // config.defaultLanguage,
-    backend: {
-      loadPath: 'translations/{{{ns}}}.json',
-    },
-    interpolation: {
-      prefix: '{{{',
-      suffix: '}}}',
-    },
-  });
+  .init(i18nextOptions,
+        (err, t) => {
+          if (err) {
+            winston.log('error',
+                        `Something went wrong loading transaltion ${t}`,
+                        err);
+          }
+          winston.log('info', 'Translations loaded successfully');
+        });
+
 
 facebookBot.setupWebserver(config.PORT, (err, webserver) => {
   if (config.environment === 'production') {
