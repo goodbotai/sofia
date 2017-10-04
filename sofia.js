@@ -5,7 +5,6 @@ const winston = require('winston');
 const expressWinston = require('express-winston');
 
 const i18next = require('i18next');
-const middleware = require('i18next-express-middleware');
 const Backend = require('i18next-node-fs-backend');
 
 const {
@@ -22,10 +21,9 @@ const {
   goto,
   generateButtonTemplate,
   generateQuickReply,
-  sendMessage,
 } = facebookUtils;
 
-const lang = config.defaultLanguage;
+const language = config.defaultLanguage;
 const sofia = facebookBot.spawn({});
 
 /**
@@ -48,7 +46,13 @@ const mockChild = {
 };
 */
 
-function getNs (langs) {
+/**
+* Get the language data from localeUtils.languages for
+* the bot's languages
+* @param {string} langs - The languages supported
+* @return {array} - array of language objects
+*/
+function getNs(langs) {
   return localeUtils.languages.filter((e) => {
     return langs.includes(e.iso6391);
   });
@@ -167,18 +171,20 @@ function fci(err, convo) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:FCI.${key}`, {childName, genderPronoun}), 'fci');
+      convo.addMessage(
+        i18next.t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
       return goto('fci');
     } else {
       return convo.addQuestion(
-        generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName, genderPronoun}),
-                               null,
-                               [{title: i18next.t(`${lang}:generic.yes`),
-                                 payload: 'yes'},
-                                {title: i18next.t(`${lang}:generic.no`),
-                                 payload: 'no'},
-                                {title: i18next.t(`${lang}:generic.idk`),
-                                 payload: 'idk'}]),
+        generateButtonTemplate(
+          i18next.t(`${language}:FCI.${key}`, {childName, genderPronoun}),
+          null,
+          [{title: i18next.t(`${language}:generic.yes`),
+            payload: 'yes'},
+           {title: i18next.t(`${language}:generic.no`),
+            payload: 'no'},
+           {title: i18next.t(`${language}:generic.idk`),
+            payload: 'idk'}]),
         nextConversation,
         {key},
         'fci');
@@ -192,8 +198,6 @@ function fci(err, convo) {
 * @param {object} convo a conversation object
 */
 function pickConversation(err, convo, {uuid, name, language}) {
-  const lang = language;
-
   fci(err, convo);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
@@ -208,7 +212,8 @@ function pickConversation(err, convo, {uuid, name, language}) {
   });
 
   convo.onTimeout((convo) => {
-    convo.addMessage(i18next.t(`${language}:generic.timeoutMessage`), 'timeout message');
+    convo.addMessage(i18next.t(`${language}:generic.timeoutMessage`),
+                     'timeout message');
     convo.gotoThread('timeout message');
     winston.log('info', '>   [TIMEOUT] ...');
   });
@@ -319,7 +324,7 @@ function createUserAndStartConversation(message, bot) {
 * We use it to start the conversation and get the user profile from Facebook.
 * @param {object} bot A bot instance created by the controller
 * @param {object} message a message object also created by the controller
-* @param {string} newLanguage An ISO6392 language code string
+* @param {string} language An ISO6392 language code string
 */
 function prepareConversation(bot, message, language) {
   const urn = `facebook:${message.user}`;
