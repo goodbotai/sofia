@@ -7,6 +7,9 @@ node_js:
 services:
   - docker
 
+before_install:
+  - pyenv global 2.7.13
+
 install:
   - npm install --dev
   - npm install travis-ecs-deploy -g
@@ -14,10 +17,25 @@ install:
 script:
   - yarn lint
 
+env:
+  global:
+    - IMAGE_NAME=goodbotai/sofia
+    - DEPLOY_BRANCHES=master
+    # AWS_REGION
+    - secure: "Iwptp3StpffT6vsqpAeMwbFRiaFN8ct3qlxnGRQIPc14NzR45nAp63vT036lygkhpCvv9w+r95oikBY2KY9MmsZfmqkVBj0rdihvB3fVZgPrWr7zk/f1oqGgCeMLrRJjAlz+Q2KtcBBDsKK7M6U5YfLvwtyr9clPRA6qeyefooFpch/LZAG5d4i53B+ARw9XPbk39eJfi/L2CGY0MFFfk3928Dyn3vDKBhHB24G63yPHlu1kc9BRPj0Li9ZD2J+yOGVKOnmFGWlS7CshOr4kRMTFBYfI/d8h8UPEFH2p78E77xWVakXlR8soOnoCHqNzZbxAVB7WAj2EUx/UYRMqodURloGnnMd3VgrerGNIeKFSiY9hA6b1sc8uufy2JVv4ogX4kkhDNZvx/lcNW77/nLpmGJt+D2fJlRIE66V+ECgqD3+WqPuBOfy6HO5kwoAEjMhTBUy2lpKVpi4CtkC76ZC+a9IjcHBBvRsocLJED30eyv0MaXVWTJmQqWpz4xlChoEcxROs4egmqGMG9QHvQJhZMpNAARqrm+KWXyCDbeu67uacLmHIRKcAVljWqkaaYt+ikJyGfd5g3//55/0WSbs/mregiRD4Zkagq9jeKBnRy99LZJUmLeke1OB+VtjNPJL8aW0YSSGtDh4yjMhYzKMENkrjuPBreH2XiN442LY="
+    # AWS_ACCESS_KEY_ID
+    - secure: "MY7XVYOQ8LT1cyJYnBr1nHT7HlrJ2IM23kHbrvDGUeN+dMSoqEeJHvkkGA5NnK3b9LFy9YF47mUSaHtMykYsateCOy27wqcV/VLl6yE6qSfprKt7d4ZLr4Zcx3hGMrHkOSb5HlbSrDg8RIaJY5EvJwdRSk9XkHK19m+GN/eTC9GQc5cRxSjtvr3NnubQJlxavfkl/OvdZwriGqNFf9U9yJVBgP8GEmfdLjB8wdQH6fgvO1xnjUFxZoMlfM6vF7UQ0vZ8x7xcWfbQ/DgS1MTYYqDGQmWqF+YSi0nMAyULfqy97SSQ4MAT2lQukd37yysTZX6nbLLoHmStaO2tvxhO5/ArCWiAaDpFp9LUALllsOUytklynPCbTe8EPKDD1tBsBoZZ4YLqFU3yLw9i2dhS15+EieiVtkKAPBC1hK5wZvCcGDEkYgiZJkS1UVpj7ZnTtKqzbjDD9YILbO7CicC04xET5QmdO5yt0mZyNt+iaK5QjJwEEJ5qUbjPTYdm5Vy/CAaOsOLryo1PzBlw39WIb7T7cW0q2CLgn9rlqRVHl5xKrW1YQAFiVU6tRl+yx1GxoD6shOtNKDdA10A/4c1UaleQwuLqly6JVS94tCQaVLbyKYEDCe8FGfehkLD3bYZ7yhb+Ud2mJ+XBRA6AO+J2ZxkkXyTHpb/vU29vlAC+jWw="
+    # AWS_SECRET_ACCESS_KEY
+    - secure: "XP/y6XiZE55K/Xnv3eZUqGKptAsUXPzvG+8lKBQsxp0o48JoO51rVexG8x2kzOGlz8IXVj7Amw6DtITIyvGgyAVgAsj6WuYBwSZ27k1JYiaZ8B4i5I906YIAz+msqqUzEu79MLz5Kn/ifzccfEddxPnhB7625+d+F8/bEQLH+qriUspjtflucN8grHUDIt+pH/xCd30n34zeC5FBNrSlm11I2a7xI6r2UuOATbX8o+7Q4FBwjMSWSeihbJZfiWfLV0/ffvaiw2SLpsfLtZh+EKdxtMRU48elPvgmI78mwP4KMy4UTDG21NSL4rPhUzZOHGUKxlVzAyPYOCuMNx+pez4LUWF5TuRs6a3Z3KwUvNG0aCHFyZITB5QsoflIR/ADdhoLQ3R8YGEADsG/SEz38cvXzg6gulaHiNEF82pAnBNoCmbQNZFY6Nc+6aUIdE4vAd/8WH0EX9RzwYZQr39XPz1aM5LNzNEzMI+lR01euwL7oiqXkLcOsHgRRedynw//P6omLSdGAKCMC+2Rgf2UxUJ4qmiW6iGxrhiiJ80LlIgEOvJJsCaN/uJKSXN2c7SoSYZQ4gVa9a6Zs0qX5cvCEGnv9BgG1nAvtKgEvmPiMb/koXmoTQ3EX6/P8OEz/1S1SBckIpMpyNyrvZzH6DvpJfHBbxaKVaCjLUOa4hVH4vc="
+    # REMOTE_IMAGE_URL
+    - secure: "iG//zYw4+02N87KNfwtfWvUnw9Sjj80KNwV47iU+8DgCFmmYtRR4oMg3vhYuo0wAiCJnGzl6GzK4DEToOQFix3AEQc2ea6Zp2dJcHbab2JMcGV9Dm3bcKliysU53HZu+VCmDHaVocX1HyemNotqPelauMIfYwCEs9G5/SXfnzLpQLBXZPtX1rAcnFvhhVinA8PRzIhwMJdEnA/cJSepO5sIXWh3/LoCbq2CpQw0sXJTkh5jRbvRe1vkN5OGmje6Bfjl2qS/txBkH8sdbQOdzO4V6dH1rCBtxffJ9r3D8hu8VO1l8/qKgsc1uni2IW4xlafN9TIqRPPVpjYCoWOdHdyAlCDqEy3FYFfIalKsDCEQwdFFNXwrTS2wTM4ZJSK/0tzsd/G8OjjaDgv8PrHWzeGT+4iDRSarevluWzaBQ1BFDgnifcaFgIkp4zfDuO1FRnU98QX/ROCcwDdQTMgNAiQq2F+RKRkTf+JRcValR08bLzbOGxB7UQjLamxIfKX/AqY3O4qzGjLVH7xPb3rvl1gnP3dwX2ZZ9SUVuCUfWY4BOd04Ka8W09dyYRbCZAyXHKunXYTHchvBjWy9JGZ/FP4HyR9QhFto5NbNdMDcCGhjx4iUYkAkkExt5nL6NgiVVwnWXqRXggAUvF2WXEMSg90e2PZWNLPTGRnJsXdledJI="
+    - ECS_CLUSTER_MASTER=Sofia
+    - ECS_SERVICE_MASTER=sofia
+
 deploy:
   skip_cleanup: true
   provider: script
   script:
     - yarn run travis-ecs-deploy
   on:
-    all_branches: true
+all_branches: true
