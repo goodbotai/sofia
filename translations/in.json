@@ -6,11 +6,12 @@
     "idkw": "Saya belum mengenal kata itu.",
     "yes": "Ya",
     "no": "Tidak",
+    "hello": "Halo",
     "idk": "Saya tidak tahu",
     "timeoutMessage": "Percakapan telah berakhir karena Anda tidak membalas dalama waktu 20 menit. Anda bisa memulai percakapan kembali dengan \"halo\" atau \"hai\"."
   },
   "caregiverKnowledge": {
-    "intro": "Sekarang, saya akan menanyakan beberapa hal tentang anak-anak dan kapan menurut Anda mereka mulai melakukan sesuatu.",
+    "intro": "Saya akan menanyakan beberapa hal tentang anak-anak dan kapan menurut Anda mereka mulai melakukan sesuatu.",
     "brainDevelopment": "Kapan otak anak mulai berkembang dan belajar?",
     "sight": "Kapan anak mulai bisa melihat?",
     "follow": "Kapan anak mulai mengikuti gerakan orang atau benda dengan matanya?",

@@ -28,6 +28,13 @@ const {
 const lang = config.defaultLanguage;
 const sofia = facebookBot.spawn({});
 
+/**
+* The english translations
+* @global
+* @const {object}
+*/
+const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
+
 // To remove
 const childName = 'Baby Boo';
 const genderPronoun = 'she';
@@ -49,7 +56,7 @@ function getNs (langs) {
 
 const i18nextOptions = {
   debug: config.debugTranslations,
-  ns: getNs(['en', 'in']).map(({iso6391}) => iso6391),   // the function call is repititve
+  ns: getNs(['en', 'in']).map(({iso6391}) => iso6391),
   defaultNS: config.defaultLanguage,
   fallbackLng: config.defaultLanguage,
   backend: {
@@ -99,36 +106,6 @@ facebookBot.setupWebserver(config.PORT, (err, webserver) => {
     webserver.use(services.sentry.errorHandler());
   }
 });
-
-const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
-
-/**
-* The FCI conversation
-* @param {string} err an error. Should be null unless there's an error.
-* @param {object} convo a conversation object
-*/
-function fci(err, convo) {
-  const fciQuestionKeys = Object.keys(enTranslation.FCI);
-  fciQuestionKeys.map((key) => {
-    if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:FCI.${key}`), 'fci');
-      return goto('fci');
-    } else {
-      return convo.addQuestion(
-        generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName}),
-                               null,
-                               [{title: i18next.t(`${lang}:generic.yes`),
-                                 payload: 'yes'},
-                                {title: i18next.t(`${lang}:generic.no`),
-                                 payload: 'no'},
-                                {title: i18next.t(`${lang}:generic.idk`),
-                                 payload: 'idk'}]),
-        nextConversation,
-        {key},
-        'fci');
-    }
-});
-}
 
 /**
 * The SRQ 20 conversation
@@ -182,40 +159,56 @@ function caregiverKnowledge(err, convo) {
 }
 
 /**
+* The FCI conversation
+* @param {string} err an error. Should be null unless there's an error.
+* @param {object} convo a conversation object
+*/
+function fci(err, convo) {
+  const fciQuestionKeys = Object.keys(enTranslation.FCI);
+  fciQuestionKeys.map((key) => {
+    if (/intro./.test(key)) {
+      convo.addMessage(i18next.t(`${lang}:FCI.${key}`, {childName, genderPronoun}), 'fci');
+      return goto('fci');
+    } else {
+      return convo.addQuestion(
+        generateButtonTemplate(i18next.t(`${lang}:FCI.${key}`, {childName, genderPronoun}),
+                               null,
+                               [{title: i18next.t(`${lang}:generic.yes`),
+                                 payload: 'yes'},
+                                {title: i18next.t(`${lang}:generic.no`),
+                                 payload: 'no'},
+                                {title: i18next.t(`${lang}:generic.idk`),
+                                 payload: 'idk'}]),
+        nextConversation,
+        {key},
+        'fci');
+    }
+});
+}
+
+/**
 * This function will likely be removed and replaced by a scheduler.
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
 */
-function pickConversation(err, convo) {
-  convo.addQuestion(
-    generateButtonTemplate('Pick a survey',
-                           ['FCI', 'SRQ 20', 'Caregiver Knowledge']),
-    [{
-      pattern: 'FCI',
-      callback: goto('fci'),
-    }, {
-      pattern: 'SRQ 20',
-      callback: goto('srq 20'),
-    }, {
-      pattern: 'CAREGIVER KNOWLEDGE',
-      callback: goto('caregiver knowledge'),
-    }],
-    {key: 'survey'});
+function pickConversation(err, convo, {uuid, name, language}) {
+  const lang = language;
 
   fci(err, convo);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
+
+  convo.transitionTo('fci', i18next.t(`${language}:generic.hello`));
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
       winston.log('info', `>   [${convo.status}] ...`);
       services.genAndPostSubmissionToOna(convo);
     }
-});
+  });
 
   convo.onTimeout((convo) => {
-    convo.addMessage(i18next.t(`${lang}:generic.timeoutMessage`),
-                     'timeout message');
+    convo.addMessage(i18next.t(`${language}:generic.timeoutMessage`), 'timeout message');
     convo.gotoThread('timeout message');
     winston.log('info', '>   [TIMEOUT] ...');
   });
@@ -246,12 +239,12 @@ facebookBot.api.messenger_profile.menu([{
         {
           title: 'English',
           type: 'postback',
-          payload: 'en',
+          payload: 'switch_en',
         },
         {
           title: 'Bahasa',
           type: 'postback',
-          payload: 'in',
+          payload: 'switch_in',
         },
       ],
     },
@@ -265,33 +258,109 @@ facebookBot.api.messenger_profile.menu([{
 },
 ]);
 
+/**
+* Get the region for a specific timezone
+* @param {Integer} timezone The timezone of the user runs from 0 to 12
+* @return {String} the region that the user is in
+*/
+function regionByTimeZone(timezone) {
+  if (timezone > 3) {
+    return 'ind';
+  } else {
+    return 'default';
+  }
+}
+
+/**
+* First try locale, if it fails try timezone, if that fails use default
+* @param {String} locale of the user from FB
+* @param {String} timezone of the user from FB
+* @return {String} language as a ISO6392 string
+*/
+function pickLanguage({locale, timezone}) {
+  if (locale) {
+    const lang = localeUtils.extractLanguageFromLocale(locale);
+    return localeUtils.lookupISO6392(lang) || config.defaultLanguage;
+  } else {
+    const region = regionByTimeZone(timezone);
+    const lang = 'default' ? config.defaultLanguage : region;
+    return localeUtils.lookupISO6392(lang);
+  }
+}
+
+/**
+* Create a karma user and start a conversation with them
+* @param {object} message a message object also created by the controller
+* @param {object} bot a bot instance created by the controller
+*/
+function createUserAndStartConversation(message, bot) {
+  services.getFacebookProfile(message.user)
+    .then((profile) => {
+      services.createUser(message.user,
+                          Object.values(config.rapidproGroups),
+                          pickLanguage(profile),
+                          profile,
+                          {opensrp_id: message.referral.ref})
+        .then((rapidProContact) =>
+              bot.startConversation(message, (err, convo) => {
+                pickConversation(err, convo, rapidProContact);
+              }))
+        .catch((reason) => http.genericCatchRejectedPromise(
+          `Failed createUser: ${reason}`));
+        })
+    .catch((reason) => http.genericCatchRejectedPromise(
+      'Failed to fetch Facebook profile' +
+        `in createUserAndStartConversation: ${reason}`));
+}
+
+/**
+* Fetch facebook user profile get the reponent's language and name
+* No return statement.
+* We use it to start the conversation and get the user profile from Facebook.
+* @param {object} bot A bot instance created by the controller
+* @param {object} message a message object also created by the controller
+* @param {string} newLanguage An ISO6392 language code string
+*/
+function prepareConversation(bot, message, language) {
+  const urn = `facebook:${message.user}`;
+  if (language) {
+    services.updateRapidProContact({urn}, {language})
+      .then((rapidProContact) =>
+            bot.startConversation(message, (err, convo) => {
+              pickConversation(err, convo, rapidProContact);
+            }))
+      .catch((reason) =>
+             http.genericCatchRejectedPromise(
+               'Failed to updateRapidProContact in prepareConversation:' +
+                 ` ${reason}`));
+  } else {
+    services.getRapidProContact({urn})
+      .then(({results: [rapidProContact]}) =>
+            bot.startConversation(message, (err, convo) => {
+              pickConversation(err, convo, rapidProContact);
+      }))
+      .catch((reason) =>
+           http.genericCatchRejectedPromise(
+             `Failed to getRapidProContact in prepareConversation: ${reason}`));
+  }
+}
 
 // Listeners
 facebookBot.on('facebook_postback', (bot, message) => {
   const {payload} = message;
-  if (['restart',
-       'get_started'].includes(payload)) {
+  if (['restart', 'get_started'].includes(payload)) {
     if (message.referral) {
-      services.genAndPostRapidproContact(config.rapidproGroups,
-                                         lookupISO6392code[lang],
-                                         message.user,
-                                         {opensrp_id: message.referral.ref});
+      createUserAndStartConversation(message, bot);
+    } else {
+      prepareConversation(bot, message);
     }
-    bot.startConversation(message, pickConversation);
-  } else if (['en', 'in'].includes(payload)) {
-    bot.reply(message, i18next.t(`${payload}:languageChangeText`));
-    lang = payload;
-    bot.startConversation(message, pickConversation);
-  }
+  } else if (['switch_en', 'switch_in'].includes(payload)) {
+    lang = payload.split('_')[1];
+    prepareConversation(bot, message, localeUtils.lookupISO6392(lang));
+}
 });
 
-facebookBot.hears(['restart', 'restart survey'],
-               'message_received',
-               function(bot, message) {
-                 bot.startConversation(message, pickConversation);
-               });
-
-                 facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai', 'tally'],
+facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
@@ -312,6 +381,8 @@ facebookBot.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                function(bot, message) {
                  bot.reply(message, i18next.t(`${lang}:generic.quitMessage`));
                });
+
+facebookBot.hears([''], 'message_received', (bot, message) => {});
 
 facebookBot.hears([/([a-z])\w+/gi],
                'message_received',

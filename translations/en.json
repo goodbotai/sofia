@@ -6,6 +6,7 @@
     "idkw": "I don't know that word yet.",
     "yes": "Yes",
     "no": "No",
+    "hello": "Hello",
     "idk": "I don't know",
     "sometimes": "Sometimes",
     "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\".",
@@ -14,7 +15,7 @@
     "nonIssue": "This is not an issue."
   },
   "caregiverKnowledge": {
-    "intro": "Now, I will ask you some things about children ane when you think they start to do things.",
+    "intro": "I will ask you some things about children ane when you think they start to do things.",
     "brainDevelopment": "When does a child’s brain begin to develop and learn?",
     "sight": "When do children begin to see?",
     "follow": "When do children begin to follow a moving person or toy, with their eyes?",
@@ -44,7 +45,7 @@
   },
 
   "FCI": {
-    "intro1": "Now, I will ask you about the things that {{{childName}}} plays with when he/she is at home.",
+    "intro1": "Now, I will ask you about the things that {{{childName}}} plays with when {{{genderPronoun}}} is at home.",
     "playWithHomemadeToys": "Does {{{childName}}} play with homemade toys, such as balls made of plastic papers, clay dolls, wire cars, or other toys made at home?",
     "playWithShopToys": "Does {{{childName}}} play with toys from a shop or manufactured toys, such as balls, dolls, cars, or other toys from a shop?",
     "playHouseholdObjects": "Does {{{childName}}} play with household objects (examples: cups, spoons, plates) or objects found outside (examples: sticks, leaves)?",
