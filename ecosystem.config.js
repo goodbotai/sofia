@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
     {
-      name      : 'sofia',
+      name      : 'Sofia',
       script    : 'sofia.js',
       // pm2 is only used in production.
       env: {
