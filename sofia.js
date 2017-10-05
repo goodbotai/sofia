@@ -166,6 +166,7 @@ function caregiverKnowledge(err, convo) {
 * The FCI conversation
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
+* @param {string} language An ISO6391 language code string
 */
 function fci(err, convo, language) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
@@ -196,6 +197,7 @@ function fci(err, convo, language) {
 * This function will likely be removed and replaced by a scheduler.
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
+* @param {object} contact a rapidpro contact object
 */
 function pickConversation(err, convo, contact) {
   const language = localeUtils.lookupISO6391(contact.language);
@@ -385,7 +387,8 @@ facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
 facebookBot.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                'message_received',
                function(bot, message) {
-                 bot.reply(message, i18next.t(`${language}:generic.quitMessage`));
+                 bot.reply(message,
+                           i18next.t(`${language}:generic.quitMessage`));
                });
 
 facebookBot.hears([''], 'message_received', (bot, message) => {});
