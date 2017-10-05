@@ -120,13 +120,13 @@ function srq20(err, convo) {
   const srq20QuestionKeys = Object.keys(enTranslation.SRQ20);
   srq20QuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:SRQ20.${key}`), 'srq 20');
+      convo.addMessage(i18next.t(`${language}:SRQ20.${key}`), 'srq 20');
       return goto('srq 20');
     } else {
       return convo.addQuestion(
-        generateButtonTemplate(i18next.t(`${lang}:SRQ20.${key}`),
-                               [i18next.t(`${lang}:generic.yes`),
-                                i18next.t(`${lang}:generic.no`)]),
+        generateButtonTemplate(i18next.t(`${language}:SRQ20.${key}`),
+                               [i18next.t(`${language}:generic.yes`),
+                                i18next.t(`${language}:generic.no`)]),
         nextConversation,
         {},
         'srq 20');
@@ -144,17 +144,17 @@ function caregiverKnowledge(err, convo) {
     enTranslation.caregiverKnowledge);
   caregiverKnowledgeQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${lang}:caregiverKnowledge.${key}`),
+      convo.addMessage(i18next.t(`${language}:caregiverKnowledge.${key}`),
                        'caregiver knowledge');
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
-      generateQuickReply(i18next.t(`${lang}:caregiverKnowledge.${key}`),
-                         [i18next.t(`${lang}:caregiverKnowledge.birth`),
-                          i18next.t(`${lang}:caregiverKnowledge.2`),
-                          i18next.t(`${lang}:caregiverKnowledge.4to5`),
-                          i18next.t(`${lang}:caregiverKnowledge.7to9`),
-                          i18next.t(`${lang}:caregiverKnowledge.9to14`)]),
+      generateQuickReply(i18next.t(`${language}:caregiverKnowledge.${key}`),
+                         [i18next.t(`${language}:caregiverKnowledge.birth`),
+                          i18next.t(`${language}:caregiverKnowledge.2`),
+                          i18next.t(`${language}:caregiverKnowledge.4to5`),
+                          i18next.t(`${language}:caregiverKnowledge.7to9`),
+                          i18next.t(`${language}:caregiverKnowledge.9to14`)]),
       nextConversation,
       {},
       'caregiver knowledge');
@@ -167,7 +167,7 @@ function caregiverKnowledge(err, convo) {
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
 */
-function fci(err, convo) {
+function fci(err, convo, language) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
@@ -197,12 +197,13 @@ function fci(err, convo) {
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
 */
-function pickConversation(err, convo, {uuid, name, language}) {
-  fci(err, convo);
+function pickConversation(err, convo, contact) {
+  const language = localeUtils.lookupISO6391(contact.language);
+  fci(err, convo, language);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
 
-  convo.transitionTo('fci', i18next.t(`${language}:generic.hello`));
+  convo.gotoThread('fci');
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
@@ -360,7 +361,7 @@ facebookBot.on('facebook_postback', (bot, message) => {
       prepareConversation(bot, message);
     }
   } else if (['switch_en', 'switch_in'].includes(payload)) {
-    lang = payload.split('_')[1];
+    const lang = payload.split('_')[1];
     prepareConversation(bot, message, localeUtils.lookupISO6392(lang));
 }
 });
@@ -370,13 +371,13 @@ facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
                function(bot, message) {
                  bot.reply(message,
                            generateButtonTemplate(
-                             i18next.t(`${lang}:generic.helpMessage`),
+                             i18next.t(`${language}:generic.helpMessage`),
                              null,
                              [{
-                               title: i18next.t(`${lang}:generic.yes`),
+                               title: i18next.t(`${language}:generic.yes`),
                                payload: 'restart',
                              }, {
-                               title: i18next.t(`${lang}:generic.no`),
+                               title: i18next.t(`${language}:generic.no`),
                                payload: 'quit',
                              }]));
                });
@@ -384,7 +385,7 @@ facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
 facebookBot.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                'message_received',
                function(bot, message) {
-                 bot.reply(message, i18next.t(`${lang}:generic.quitMessage`));
+                 bot.reply(message, i18next.t(`${language}:generic.quitMessage`));
                });
 
 facebookBot.hears([''], 'message_received', (bot, message) => {});
@@ -392,5 +393,5 @@ facebookBot.hears([''], 'message_received', (bot, message) => {});
 facebookBot.hears([/([a-z])\w+/gi],
                'message_received',
                function(bot, message) {
-                 bot.reply(message, i18next.t(`${lang}:generic.idkw`));
+                 bot.reply(message, i18next.t(`${language}:generic.idkw`));
                });
