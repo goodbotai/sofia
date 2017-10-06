@@ -209,6 +209,11 @@ function pickConversation(err, convo, contact) {
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
+      if (convo.status=='completed') {
+        facebookUtils.sendMessage(sofia, convo.context.user, (err, convo) => {
+          convo.say(i18next.t(`${language}:generic.outro`));
+        });
+      }
       winston.log('info', `>   [${convo.status}] ...`);
       services.genAndPostSubmissionToOna(convo);
     }
