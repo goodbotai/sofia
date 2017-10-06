@@ -12,7 +12,8 @@
     "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\".",
     "major":"This is always a major issue.",
     "minor": "This is a mild issue.",
-    "nonIssue": "This is not an issue."
+    "nonIssue": "This is not an issue.",
+    "outro": "Thank you and goodbye."
   },
   "caregiverKnowledge": {
     "intro": "I will ask you some things about children ane when you think they start to do things.",

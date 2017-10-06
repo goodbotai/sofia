@@ -8,7 +8,11 @@
     "no": "Tidak",
     "hello": "Halo",
     "idk": "Saya tidak tahu",
-    "timeoutMessage": "Percakapan telah berakhir karena Anda tidak membalas dalama waktu 20 menit. Anda bisa memulai percakapan kembali dengan \"halo\" atau \"hai\"."
+    "timeoutMessage": "Percakapan telah berakhir karena Anda tidak membalas dalama waktu 20 menit. Anda bisa memulai percakapan kembali dengan \"halo\" atau \"hai\".",
+    "major": "Ini selalu menjadi isu utama.",
+    "minor": "Ini adalah masalah ringan.",
+    "nonIssue": "Ini bukan sebuah masalah.",
+    "outro": "Terima kasih dan sampai jumpa."
   },
   "caregiverKnowledge": {
     "intro": "Saya akan menanyakan beberapa hal tentang anak-anak dan kapan menurut Anda mereka mulai melakukan sesuatu.",
