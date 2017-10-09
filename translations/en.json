@@ -46,7 +46,7 @@
   },
 
   "FCI": {
-    "intro1": "Now, I will ask you about the things that {{{childName}}} plays with when {{{genderPronoun}}} is at home.",
+    "intro1": "Now, I will ask you about the things that {{{childName}}} plays with when they are at home.",
     "playWithHomemadeToys": "Does {{{childName}}} play with homemade toys, such as balls made of plastic papers, clay dolls, wire cars, or other toys made at home?",
     "playWithShopToys": "Does {{{childName}}} play with toys from a shop or manufactured toys, such as balls, dolls, cars, or other toys from a shop?",
     "playHouseholdObjects": "Does {{{childName}}} play with household objects (examples: cups, spoons, plates) or objects found outside (examples: sticks, leaves)?",

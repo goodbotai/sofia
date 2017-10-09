@@ -34,7 +34,7 @@ const sofia = facebookBot.spawn({});
 const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
 
 // To remove
-const childName = 'Baby Boo';
+const childName = 'your child';
 const genderPronoun = 'she';
 /*
 const mockChild = {
