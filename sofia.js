@@ -269,7 +269,7 @@ facebookBot.api.messenger_profile.menu([{
     },
   ],
 }, {
-  locale: 'in_ID',
+  locale: 'id_ID',
   composer_input_disabled: true,
   call_to_actions: [
     {
