@@ -102,7 +102,7 @@ facebookBot.setupWebserver(config.PORT, (err, webserver) => {
   facebookBot.createWebhookEndpoints(webserver, sofia, () => {});
 
   webserver.get('/', (req, res) => {
-    const html = '<h3>This is karma</h3>';
+    const html = '<h3>Sofia is a bot for ECD</h3>';
     res.send(html);
   });
 
@@ -233,7 +233,7 @@ facebookBot.api.messenger_profile.greeting( 'Sofia is here to help with' +
 facebookBot.api.messenger_profile.get_started('get_started');
 facebookBot.api.messenger_profile.menu([{
   locale: 'default',
-  composer_input_disabled: false,
+  composer_input_disabled: true,
   call_to_actions: [
     {
       title: 'Help',
@@ -251,6 +251,43 @@ facebookBot.api.messenger_profile.menu([{
       call_to_actions: [
         {
           title: 'English',
+          type: 'postback',
+          payload: 'switch_en',
+        },
+        {
+          title: 'Bahasa',
+          type: 'postback',
+          payload: 'switch_in',
+        },
+      ],
+    },
+    {
+      type: 'web_url',
+      title: 'FAQ',
+      url: 'https://sofia.goodbot.ai/',
+      webview_height_ratio: 'full',
+    },
+  ],
+}, {
+  locale: 'in_ID',
+  composer_input_disabled: true,
+  call_to_actions: [
+    {
+      title: 'Membantu',
+      type: 'nested',
+      call_to_actions: [
+        {
+          title: 'Mengulang kembali',
+          type: 'postback',
+          payload: 'restart',
+        },
+      ],
+    },
+    {title: 'Ganti bahasa',
+      type: 'nested',
+      call_to_actions: [
+        {
+          title: 'Inggris',
           type: 'postback',
           payload: 'switch_en',
         },
@@ -307,13 +344,14 @@ function pickLanguage({locale, timezone}) {
 * @param {object} bot a bot instance created by the controller
 */
 function createUserAndStartConversation(message, bot) {
+  const extraArgs = message.referral ? {opensrp_id: message.referral.ref} : {};
   services.getFacebookProfile(message.user)
     .then((profile) => {
       services.createUser(message.user,
                           Object.values(config.rapidproGroups),
                           pickLanguage(profile),
                           profile,
-                          {opensrp_id: message.referral.ref})
+                          extraArgs)
         .then((rapidProContact) =>
               bot.startConversation(message, (err, convo) => {
                 pickConversation(err, convo, rapidProContact);
@@ -361,16 +399,14 @@ function prepareConversation(bot, message, language) {
 // Listeners
 facebookBot.on('facebook_postback', (bot, message) => {
   const {payload} = message;
-  if (['restart', 'get_started'].includes(payload)) {
-    if (message.referral) {
-      createUserAndStartConversation(message, bot);
-    } else {
-      prepareConversation(bot, message);
-    }
+  if (['get_started'].includes(payload)) {
+    createUserAndStartConversation(message, bot);
+  } else if (['restart'].includes(payload)) {
+    prepareConversation(bot, message);
   } else if (['switch_en', 'switch_in'].includes(payload)) {
     const lang = payload.split('_')[1];
     prepareConversation(bot, message, localeUtils.lookupISO6392(lang));
-}
+  }
 });
 
 facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
