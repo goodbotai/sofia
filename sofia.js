@@ -9,7 +9,7 @@ const Backend = require('i18next-node-fs-backend');
 
 const {
   facebookUtils,
-  facebookBot,
+  facebook,
   services,
   config,
   http,
@@ -24,7 +24,7 @@ const {
 } = facebookUtils;
 
 const language = config.defaultLanguage;
-const sofia = facebookBot.spawn({});
+const sofia = facebook.controller.spawn({});
 
 /**
 * The english translations
@@ -85,7 +85,7 @@ i18next
         });
 
 
-facebookBot.setupWebserver(config.PORT, (err, webserver) => {
+facebook.controller.setupWebserver(config.PORT, (err, webserver) => {
   if (config.environment === 'production') {
     webserver.use(services.sentry.requestHandler());
   }
@@ -99,7 +99,7 @@ facebookBot.setupWebserver(config.PORT, (err, webserver) => {
       })],
   }));
 
-  facebookBot.createWebhookEndpoints(webserver, sofia, () => {});
+  facebook.controller.createWebhookEndpoints(webserver, sofia, () => {});
 
   webserver.get('/', (req, res) => {
     const html = '<h3>Sofia is a bot for ECD</h3>';
@@ -215,7 +215,7 @@ function pickConversation(err, convo, contact) {
         });
       }
       winston.log('info', `>   [${convo.status}] ...`);
-      services.genAndPostSubmissionToOna(convo);
+      services.genAndPostSubmissionToOna(convo, contact);
     }
   });
 
@@ -228,10 +228,10 @@ function pickConversation(err, convo, contact) {
 }
 
 // Messenger configs
-facebookBot.api.messenger_profile.greeting( 'Sofia is here to help with' +
-                                                  ' your ECD needs.');
-facebookBot.api.messenger_profile.get_started('get_started');
-facebookBot.api.messenger_profile.menu([{
+facebook.controller.api.messenger_profile.greeting( 'Sofia is here to help' +
+                                                  ' with your ECD needs.');
+facebook.controller.api.messenger_profile.get_started('get_started');
+facebook.controller.api.messenger_profile.menu([{
   locale: 'default',
   composer_input_disabled: true,
   call_to_actions: [
@@ -397,7 +397,7 @@ function prepareConversation(bot, message, language) {
 }
 
 // Listeners
-facebookBot.on('facebook_postback', (bot, message) => {
+facebook.controller.on('facebook_postback', (bot, message) => {
   const {payload} = message;
   if (['get_started'].includes(payload)) {
     createUserAndStartConversation(message, bot);
@@ -409,7 +409,7 @@ facebookBot.on('facebook_postback', (bot, message) => {
   }
 });
 
-facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
+facebook.controller.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
@@ -425,16 +425,16 @@ facebookBot.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
                              }]));
                });
 
-facebookBot.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
+facebook.controller.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
                            i18next.t(`${language}:generic.quitMessage`));
                });
 
-facebookBot.hears([''], 'message_received', (bot, message) => {});
+facebook.controller.hears([''], 'message_received', (bot, message) => {});
 
-facebookBot.hears([/([a-z])\w+/gi],
+facebook.controller.hears([/([a-z])\w+/gi],
                'message_received',
                function(bot, message) {
                  bot.reply(message, i18next.t(`${language}:generic.idkw`));
