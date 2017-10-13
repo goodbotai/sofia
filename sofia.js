@@ -2,9 +2,6 @@ const borq = require('borq');
 const fs = require('fs');
 const setup = require('./setup.js');
 const winston = require('winston');
-const expressWinston = require('express-winston');
-const i18next = require('i18next');
-const Backend = require('i18next-node-fs-backend');
 const {
   facebookUtils,
   facebook,
