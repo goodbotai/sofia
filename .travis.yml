@@ -29,13 +29,23 @@ env:
     - secure: "KSpCQiOid2lKzjThyZ8zYCa4eGXAN71MQ7zXj7NLMVlRCCyL0AbePeC5VnuRcuvNWzMz4iqwIdLC7o0NFaa+l2oGZu1vBaETVj2xacQTU729QW077Max8kQmBUBnwe86MEtWspqwuFg2kqNiCZ2Ej5P1zP3sMtBFn2sIfc9otFTrb8Mv+7N9O8UWMQCUrsvE6j3aa3qD8y8eKyEr5acKj0GroRB8K7KDRNx/mYsEnkWHv77nMxHv8exHzrcAJFijiSfFRmw/r2h6Rq9NiHvU6SRxSK8TA631q8+zvTpFwE4oMkUvdUfx1R+If2YMFmT3kiTmWVkjfaVBvWIgs99Nvq0m5fvNWLolo9K2Bmq2CPVBTuroSvSk2F2mVmEbo/ou9ErgOy6Idsbpk24gaH1lh0LTfS25lESDzlqd/SQO+xJf6QV1d7bwCDfze2XG60f06Hpl6IaaCeDkK7YXxjrcrSzDIHKghnsEPAxrYOiWHtmkcjhc8PPfbwUZsnFoFqgrBCrapklTQ1XWzNEdrqrd+VXs4CZiBET7BmrrJKGTHnh7odCWFlDNHBY9ShHljx99CD9/x/oi0rzoZ3Ffz6qzQdRgHJgfu2L/JYZGqQaEps9cl2iV1mDD98ZSfbuBNGespF6uwEYb2H4ZEiXdxlPnZtd1azzuokeAMNAMJEm8Q38="
     # REMOTE_IMAGE_URL
     - secure: "iG//zYw4+02N87KNfwtfWvUnw9Sjj80KNwV47iU+8DgCFmmYtRR4oMg3vhYuo0wAiCJnGzl6GzK4DEToOQFix3AEQc2ea6Zp2dJcHbab2JMcGV9Dm3bcKliysU53HZu+VCmDHaVocX1HyemNotqPelauMIfYwCEs9G5/SXfnzLpQLBXZPtX1rAcnFvhhVinA8PRzIhwMJdEnA/cJSepO5sIXWh3/LoCbq2CpQw0sXJTkh5jRbvRe1vkN5OGmje6Bfjl2qS/txBkH8sdbQOdzO4V6dH1rCBtxffJ9r3D8hu8VO1l8/qKgsc1uni2IW4xlafN9TIqRPPVpjYCoWOdHdyAlCDqEy3FYFfIalKsDCEQwdFFNXwrTS2wTM4ZJSK/0tzsd/G8OjjaDgv8PrHWzeGT+4iDRSarevluWzaBQ1BFDgnifcaFgIkp4zfDuO1FRnU98QX/ROCcwDdQTMgNAiQq2F+RKRkTf+JRcValR08bLzbOGxB7UQjLamxIfKX/AqY3O4qzGjLVH7xPb3rvl1gnP3dwX2ZZ9SUVuCUfWY4BOd04Ka8W09dyYRbCZAyXHKunXYTHchvBjWy9JGZ/FP4HyR9QhFto5NbNdMDcCGhjx4iUYkAkkExt5nL6NgiVVwnWXqRXggAUvF2WXEMSg90e2PZWNLPTGRnJsXdledJI="
-    - ECS_CLUSTER_MASTER=sofia-production
-    - ECS_SERVICE_MASTER=sofia-production
 
 deploy:
+  # deploy to staging environment
   skip_cleanup: true
   provider: script
+  ECS_CLUSTER_MASTER: sofia-staging
+  ECS_SERVICE_MASTER: sofia-staging
   script:
     - yarn run travis-ecs-deploy
   on:
-all_branches: true
+    branch: master
+  # deploy to production environment
+  skip_cleanup: true
+  provider: script
+  ECS_CLUSTER_MASTER: sofia-production
+  ECS_SERVICE_MASTER: sofia-production
+  script:
+    - yarn run travis-ecs-deploy
+  on:
+    tags: true
