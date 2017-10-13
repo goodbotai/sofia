@@ -1,30 +1,30 @@
 const borq = require('borq');
-let fs = require('fs');
-
+const fs = require('fs');
+const setup = require('./setup.js');
 const winston = require('winston');
 const expressWinston = require('express-winston');
-
 const i18next = require('i18next');
 const Backend = require('i18next-node-fs-backend');
-
 const {
   facebookUtils,
   facebook,
   services,
   config,
   http,
+  translate,
   localeUtils,
 } = borq;
-
 const {
   nextConversation,
   goto,
   generateButtonTemplate,
   generateQuickReply,
 } = facebookUtils;
+const t = translate;
 
 const language = config.defaultLanguage;
 const sofia = facebook.controller.spawn({});
+setup(sofia);
 
 /**
 * The english translations
@@ -47,71 +47,6 @@ const mockChild = {
 */
 
 /**
-* Get the language data from localeUtils.languages for
-* the bot's languages
-* @param {string} langs - The languages supported
-* @return {array} - array of language objects
-*/
-function getNs(langs) {
-  return localeUtils.languages.filter((e) => {
-    return langs.includes(e.iso6391);
-  });
-}
-
-const i18nextOptions = {
-  debug: config.debugTranslations,
-  ns: getNs(['en', 'in']).map(({iso6391}) => iso6391),
-  defaultNS: config.defaultLanguage,
-  fallbackLng: config.defaultLanguage,
-  backend: {
-    loadPath: 'translations/{{{ns}}}.json',
-  },
-  interpolation: {
-    prefix: '{{{',
-    suffix: '}}}',
-  },
-};
-
-i18next
-  .use(Backend)
-  .init(i18nextOptions,
-        (err, t) => {
-          if (err) {
-            winston.log('error',
-                        `Something went wrong loading transaltion ${t}`,
-                        err);
-          }
-          winston.log('info', 'Translations loaded successfully');
-        });
-
-
-facebook.controller.setupWebserver(config.PORT, (err, webserver) => {
-  if (config.environment === 'production') {
-    webserver.use(services.sentry.requestHandler());
-  }
-
-  webserver.use(expressWinston.logger({
-    transports: [
-      new winston.transports.File({
-        filename: 'karma.access.log',
-        logstash: true,
-        zippedArchive: true,
-      })],
-  }));
-
-  facebook.controller.createWebhookEndpoints(webserver, sofia, () => {});
-
-  webserver.get('/', (req, res) => {
-    const html = '<h3>Sofia is a bot for ECD</h3>';
-    res.send(html);
-  });
-
-  if (config.environment === 'production') {
-    webserver.use(services.sentry.errorHandler());
-  }
-});
-
-/**
 * The SRQ 20 conversation
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
@@ -120,13 +55,13 @@ function srq20(err, convo) {
   const srq20QuestionKeys = Object.keys(enTranslation.SRQ20);
   srq20QuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${language}:SRQ20.${key}`), 'srq 20');
+      convo.addMessage(t(`${language}:SRQ20.${key}`), 'srq 20');
       return goto('srq 20');
     } else {
       return convo.addQuestion(
-        generateButtonTemplate(i18next.t(`${language}:SRQ20.${key}`),
-                               [i18next.t(`${language}:generic.yes`),
-                                i18next.t(`${language}:generic.no`)]),
+        generateButtonTemplate(t(`${language}:SRQ20.${key}`),
+                               [t(`${language}:generic.yes`),
+                                t(`${language}:generic.no`)]),
         nextConversation,
         {},
         'srq 20');
@@ -144,17 +79,17 @@ function caregiverKnowledge(err, convo) {
     enTranslation.caregiverKnowledge);
   caregiverKnowledgeQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
-      convo.addMessage(i18next.t(`${language}:caregiverKnowledge.${key}`),
+      convo.addMessage(t(`${language}:caregiverKnowledge.${key}`),
                        'caregiver knowledge');
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
-      generateQuickReply(i18next.t(`${language}:caregiverKnowledge.${key}`),
-                         [i18next.t(`${language}:caregiverKnowledge.birth`),
-                          i18next.t(`${language}:caregiverKnowledge.2`),
-                          i18next.t(`${language}:caregiverKnowledge.4to5`),
-                          i18next.t(`${language}:caregiverKnowledge.7to9`),
-                          i18next.t(`${language}:caregiverKnowledge.9to14`)]),
+      generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
+                         [t(`${language}:caregiverKnowledge.birth`),
+                          t(`${language}:caregiverKnowledge.2`),
+                          t(`${language}:caregiverKnowledge.4to5`),
+                          t(`${language}:caregiverKnowledge.7to9`),
+                          t(`${language}:caregiverKnowledge.9to14`)]),
       nextConversation,
       {},
       'caregiver knowledge');
@@ -173,18 +108,18 @@ function fci(err, convo, language) {
   fciQuestionKeys.map((key) => {
     if (/intro./.test(key)) {
       convo.addMessage(
-        i18next.t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
+        t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
       return goto('fci');
     } else {
       return convo.addQuestion(
         generateButtonTemplate(
-          i18next.t(`${language}:FCI.${key}`, {childName, genderPronoun}),
+          t(`${language}:FCI.${key}`, {childName, genderPronoun}),
           null,
-          [{title: i18next.t(`${language}:generic.yes`),
+          [{title: t(`${language}:generic.yes`),
             payload: 'yes'},
-           {title: i18next.t(`${language}:generic.no`),
+           {title: t(`${language}:generic.no`),
             payload: 'no'},
-           {title: i18next.t(`${language}:generic.idk`),
+           {title: t(`${language}:generic.idk`),
             payload: 'idk'}]),
         nextConversation,
         {key},
@@ -211,7 +146,7 @@ function pickConversation(err, convo, contact) {
     if (convo.status=='completed' || convo.status=='interrupted') {
       if (convo.status=='completed') {
         facebookUtils.sendMessage(sofia, convo.context.user, (err, convo) => {
-          convo.say(i18next.t(`${language}:generic.outro`));
+          convo.say(t(`${language}:generic.outro`));
         });
       }
       winston.log('info', `>   [${convo.status}] ...`);
@@ -220,93 +155,13 @@ function pickConversation(err, convo, contact) {
   });
 
   convo.onTimeout((convo) => {
-    convo.addMessage(i18next.t(`${language}:generic.timeoutMessage`),
+    convo.addMessage(t(`${language}:generic.timeoutMessage`),
                      'timeout message');
     convo.gotoThread('timeout message');
     winston.log('info', '>   [TIMEOUT] ...');
   });
 }
 
-// Messenger configs
-facebook.controller.api.messenger_profile.greeting( 'Sofia is here to help' +
-                                                  ' with your ECD needs.');
-facebook.controller.api.messenger_profile.get_started('get_started');
-facebook.controller.api.messenger_profile.menu([{
-  locale: 'default',
-  composer_input_disabled: true,
-  call_to_actions: [
-    {
-      title: 'Help',
-      type: 'nested',
-      call_to_actions: [
-        {
-          title: 'Restart survery',
-          type: 'postback',
-          payload: 'restart',
-        },
-      ],
-    },
-    {title: 'Change language',
-      type: 'nested',
-      call_to_actions: [
-        {
-          title: 'English',
-          type: 'postback',
-          payload: 'switch_en',
-        },
-        {
-          title: 'Bahasa',
-          type: 'postback',
-          payload: 'switch_in',
-        },
-      ],
-    },
-    {
-      type: 'web_url',
-      title: 'FAQ',
-      url: 'https://sofia.goodbot.ai/',
-      webview_height_ratio: 'full',
-    },
-  ],
-}, {
-  locale: 'id_ID',
-  composer_input_disabled: true,
-  call_to_actions: [
-    {
-      title: 'Membantu',
-      type: 'nested',
-      call_to_actions: [
-        {
-          title: 'Mengulang kembali',
-          type: 'postback',
-          payload: 'restart',
-        },
-      ],
-    },
-    {title: 'Ganti bahasa',
-      type: 'nested',
-      call_to_actions: [
-        {
-          title: 'Inggris',
-          type: 'postback',
-          payload: 'switch_en',
-        },
-        {
-          title: 'Bahasa',
-          type: 'postback',
-          payload: 'switch_in',
-        },
-      ],
-    },
-    {
-      type: 'web_url',
-      title: 'FAQ',
-      url: 'https://sofia.goodbot.ai/',
-      webview_height_ratio: 'full',
-    },
-  ],
-},
-]);
 
 /**
 * Get the region for a specific timezone
@@ -396,7 +251,6 @@ function prepareConversation(bot, message, language) {
   }
 }
 
-// Listeners
 facebook.controller.on('facebook_postback', (bot, message) => {
   const {payload} = message;
   if (['get_started'].includes(payload)) {
@@ -414,13 +268,13 @@ facebook.controller.hears(['👋', 'hello', 'halo', 'hi', 'hai'],
                function(bot, message) {
                  bot.reply(message,
                            generateButtonTemplate(
-                             i18next.t(`${language}:generic.helpMessage`),
+                             t(`${language}:generic.helpMessage`),
                              null,
                              [{
-                               title: i18next.t(`${language}:generic.yes`),
+                               title: t(`${language}:generic.yes`),
                                payload: 'restart',
                              }, {
-                               title: i18next.t(`${language}:generic.no`),
+                               title: t(`${language}:generic.no`),
                                payload: 'quit',
                              }]));
                });
@@ -429,7 +283,7 @@ facebook.controller.hears(['quit', 'quiet', 'shut up', 'stop', 'end'],
                'message_received',
                function(bot, message) {
                  bot.reply(message,
-                           i18next.t(`${language}:generic.quitMessage`));
+                           t(`${language}:generic.quitMessage`));
                });
 
 facebook.controller.hears([''], 'message_received', (bot, message) => {});
@@ -437,5 +291,5 @@ facebook.controller.hears([''], 'message_received', (bot, message) => {});
 facebook.controller.hears([/([a-z])\w+/gi],
                'message_received',
                function(bot, message) {
-                 bot.reply(message, i18next.t(`${language}:generic.idkw`));
+                 bot.reply(message, t(`${language}:generic.idkw`));
                });
