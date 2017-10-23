@@ -125,19 +125,62 @@ function fci(err, convo, language) {
 });
 }
 
+function getFormId (conversationName) {
+  const keys = Object.keys(config.onaFormIds);
+  const lowercasedFormIds = keys.reduce((acc, key) => {
+    const lowercaseKey = key.toLowerCase();
+    acc[lowercaseKey] = config.onaFormIds[key].toLowerCase();
+    return acc;
+  }, {});
+  return lowercasedFormIds[conversationName.toLowerCase()];
+}
+
 /**
 * This function will likely be removed and replaced by a scheduler.
 * @param {string} err an error. Should be null unless there's an error.
 * @param {object} convo a conversation object
 * @param {object} contact a rapidpro contact object
 */
-function pickConversation(err, convo, contact) {
-  const language = localeUtils.lookupISO6391(contact.language);
+function pickConversation(err, convo, {language: lang, name}) {
+  const language = localeUtils.lookupISO6391(lang);
+  let idString;
   fci(err, convo, language);
   srq20(err, convo);
   caregiverKnowledge(err, convo);
 
-  convo.gotoThread('fci');
+  convo.addQuestion(
+    generateButtonTemplate('Sofia trial pick a survey',
+                           null,
+                           [{title: 'FCI',
+                             payload: 'fci'},
+                            {title: 'Caregiver Knowledge',
+                             payload: 'caregiver_knowledge'},
+                            {title: 'SRQ 20',
+                             payload: 'srq20'}]),
+    [{
+      pattern: 'fci',
+      callback: (res, conv) => {
+        idString = getFormId('fci');
+        convo.gotoThread('fci');
+        convo.next();
+      },
+    }, {
+      pattern: 'caregiver_knowledge',
+      callback: (res, conv) => {
+        idString = getFormId('caregiverKnowledge');
+        convo.gotoThread('caregiver knowledge');
+        convo.next();
+      },
+    }, {
+      pattern: 'srq20',
+      callback: (res, conv) => {
+        idString = getFormId('srq20');
+        convo.gotoThread('srq 20');
+        convo.next();
+      },
+    }], {
+      key: 'intro'
+    });
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
@@ -145,16 +188,17 @@ function pickConversation(err, convo, contact) {
         facebookUtils.sendMessage(sofia, convo.context.user, (err, convo) => {
           convo.say(t(`${language}:generic.outro`));
         });
+        services.genAndPostSubmissionToOna(convo, {name, idString});
       }
       winston.log('info', `>   [${convo.status}] ...`);
-      services.genAndPostSubmissionToOna(convo, contact);
     }
   });
 
   convo.onTimeout((convo) => {
-    convo.addMessage(t(`${language}:generic.timeoutMessage`),
-                     'timeout message');
-    convo.gotoThread('timeout message');
+    facebookUtils.sendMessage(sofia, convo.context.user, (err, convo) => {
+      convo.say(t(`${language}:generic.timeoutMessage`));
+    });
+    services.genAndPostSubmissionToOna(convo, {name, idString});
     winston.log('info', '>   [TIMEOUT] ...');
   });
 }
