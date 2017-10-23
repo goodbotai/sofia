@@ -32,6 +32,8 @@ const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
 
 // To remove
 const childName = 'your child';
+const motherName = 'mom';
+const fatherName = 'dad';
 const genderPronoun = 'she';
 /*
 const mockChild = {
@@ -107,10 +109,16 @@ function fci(err, convo, language) {
       convo.addMessage(
         t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
       return goto('fci');
+    } else if (/count$/gi.test(key)) {
+      return convo.addQuestion(t(`${language}:FCI.${key}`),
+                               nextConversation,
+                               {key},
+                               'fci');
     } else {
       return convo.addQuestion(
         generateButtonTemplate(
-          t(`${language}:FCI.${key}`, {childName, genderPronoun}),
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
           null,
           [{title: t(`${language}:choices.yes`),
             payload: 'yes'},

@@ -85,8 +85,8 @@
     "fatherPlay": "Did {{{childName}}}'s father play with {{{childName}}}?",
     "caregiverPlay": "Did another caregiver over age 15 years play with {{{childName}}}?",
     "nameountOrDraw": "In the past 3 days, did anyone name, count, or draw things with {{{childName}}}?",
-    "motherNameountOrDraw": "Did {{{childName}}}'s mother name, count or drawy things with {{{childName}}}?",
-    "fatherNameountOrDraw": "Did {{{childName}}}'s father name, count, or draw things with {{{childName}}}?",
+    "motherNameountOrDraw": "Did {{{motherName}}} count or draw things with {{{childName}}}?",
+    "fatherNameountOrDraw": "Did {{{fatherName}}} count or draw things with {{{childName}}}?",
     "caregiverCountDraw": "Did another caregiver over age 15 years name, count, or draw things with {{{childName}}}?"
   },
 
