@@ -4,10 +4,7 @@
     "quitMessage": "Bye.\nYou can start me up again by sending me a \"hello\".",
     "languageChangeText": "Okay, changing language.",
     "idkw": "I don't know that word yet.",
-    "yes": "Yes",
-    "no": "No",
     "hello": "Hello",
-    "idk": "I don't know",
     "sometimes": "Sometimes",
     "timeoutMessage": "Conversation has ended because you did not reply within 20 minutes. You may reply with \"hello\" or \"hi\".",
     "major":"This is always a major issue.",
@@ -15,8 +12,20 @@
     "nonIssue": "This is not an issue.",
     "outro": "Thank you and goodbye."
   },
+
+  "choices": {
+    "yes": "Yes",
+    "no": "No",
+    "idk": "I don't know",
+    "birth": "In utero or birth",
+    "2": "birth to 2 months",
+    "4to5": "4-5 months",
+    "7to9": "7-9 months",
+    "9to14": "9-14 months"
+  },
+
   "caregiverKnowledge": {
-    "intro": "I will ask you some things about children ane when you think they start to do things.",
+    "intro1": "I will ask you some things about children and when you think they start to do things.",
     "brainDevelopment": "When does a child’s brain begin to develop and learn?",
     "sight": "When do children begin to see?",
     "follow": "When do children begin to follow a moving person or toy, with their eyes?",
@@ -36,13 +45,7 @@
     "sitWithSupport": "When should mothers begin to let children sit with support?",
     "giveToys": "When should mothers begin to give children clean and safe objects or toys which they can mouth?",
     "lookAtBooks": "When should mothers begin to look at children’s books with their children?",
-    "play": "When should mothers begin to give children clean and safe household items to play with?",
-
-    "birth": "In utero or birth",
-    "2": "birth to 2 months",
-    "4to5": "4-5 months",
-    "7to9": "7-9 months",
-    "9to14": "9-14 months"
+    "play": "When should mothers begin to give children clean and safe household items to play with?"
   },
 
   "FCI": {
