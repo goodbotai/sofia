@@ -34,8 +34,8 @@ deploy:
   # deploy to staging environment
   skip_cleanup: true
   provider: script
-  ECS_CLUSTER_MASTER: sofia-staging
-  ECS_SERVICE_MASTER: sofia-staging
+  ECS_CLUSTER_MASTER: sofia-production
+  ECS_SERVICE_MASTER: sofia-production
   script:
     - yarn run travis-ecs-deploy
   on:
