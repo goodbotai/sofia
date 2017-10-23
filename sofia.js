@@ -51,16 +51,16 @@ const mockChild = {
 function srq20(err, convo) {
   const srq20QuestionKeys = Object.keys(enTranslation.SRQ20);
   srq20QuestionKeys.map((key) => {
-    if (/intro./.test(key)) {
+    if (/^intro*/gi.test(key)) {
       convo.addMessage(t(`${language}:SRQ20.${key}`), 'srq 20');
       return goto('srq 20');
     } else {
       return convo.addQuestion(
         generateButtonTemplate(t(`${language}:SRQ20.${key}`),
-                               [t(`${language}:generic.yes`),
-                                t(`${language}:generic.no`)]),
+                               [t(`${language}:choices.yes`),
+                                t(`${language}:choices.no`)]),
         nextConversation,
-        {},
+        {key},
         'srq 20');
     }
 });
@@ -75,20 +75,20 @@ function caregiverKnowledge(err, convo) {
   const caregiverKnowledgeQuestionKeys = Object.keys(
     enTranslation.caregiverKnowledge);
   caregiverKnowledgeQuestionKeys.map((key) => {
-    if (/intro./.test(key)) {
+    if (/^intro*/gi.test(key)) {
       convo.addMessage(t(`${language}:caregiverKnowledge.${key}`),
                        'caregiver knowledge');
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
       generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
-                         [t(`${language}:caregiverKnowledge.birth`),
-                          t(`${language}:caregiverKnowledge.2`),
-                          t(`${language}:caregiverKnowledge.4to5`),
-                          t(`${language}:caregiverKnowledge.7to9`),
-                          t(`${language}:caregiverKnowledge.9to14`)]),
+                         [t(`${language}:choices.birth`),
+                          t(`${language}:choices.2`),
+                          t(`${language}:choices.4to5`),
+                          t(`${language}:choices.7to9`),
+                          t(`${language}:choices.9to14`)]),
       nextConversation,
-      {},
+      {key},
       'caregiver knowledge');
     }
 });
@@ -103,7 +103,7 @@ function caregiverKnowledge(err, convo) {
 function fci(err, convo, language) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
-    if (/intro./.test(key)) {
+    if (/^intro*/gi.test(key)) {
       convo.addMessage(
         t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
       return goto('fci');
@@ -112,11 +112,11 @@ function fci(err, convo, language) {
         generateButtonTemplate(
           t(`${language}:FCI.${key}`, {childName, genderPronoun}),
           null,
-          [{title: t(`${language}:generic.yes`),
+          [{title: t(`${language}:choices.yes`),
             payload: 'yes'},
-           {title: t(`${language}:generic.no`),
+           {title: t(`${language}:choices.no`),
             payload: 'no'},
-           {title: t(`${language}:generic.idk`),
+           {title: t(`${language}:choices.idk`),
             payload: 'idk'}]),
         nextConversation,
         {key},
