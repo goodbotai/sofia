@@ -125,7 +125,15 @@ function fci(err, convo, language) {
 });
 }
 
-function getFormId (conversationName) {
+/**
+* Get ONA Form ID string given a conversation name
+* Lowercase everything and compare
+* @param {string} conversationName - The name of the current conversation
+* should have a corresponding key in ONA_FORM_IDS env var
+* @return {string} - ONA form ID string
+*/
+function getFormId(conversationName) {
+  // to do: move to borq
   const keys = Object.keys(config.onaFormIds);
   const lowercasedFormIds = keys.reduce((acc, key) => {
     const lowercaseKey = key.toLowerCase();
@@ -179,7 +187,7 @@ function pickConversation(err, convo, {language: lang, name}) {
         convo.next();
       },
     }], {
-      key: 'intro'
+      key: 'intro',
     });
 
   convo.on('end', function(convo) {
