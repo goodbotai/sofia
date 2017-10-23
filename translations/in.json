@@ -14,6 +14,15 @@
     "nonIssue": "Ini bukan sebuah masalah.",
     "outro": "Terima kasih dan sampai jumpa."
   },
+
+  "choices": {
+    "birth": "Dalam kandungan atau saat lahir",
+    "2": "lahir sampai 2 bulan",
+    "4to5": "4-5 bulan",
+    "7to9": "7-9 bulan",
+    "9to14": "9-14 bulan"
+  },
+
   "caregiverKnowledge": {
     "intro": "Saya akan menanyakan beberapa hal tentang anak-anak dan kapan menurut Anda mereka mulai melakukan sesuatu.",
     "brainDevelopment": "Kapan otak anak mulai berkembang dan belajar?",
@@ -35,13 +44,7 @@
     "sitWithSupport": "Kapan ibu harus melatih anak belajar duduk dengan bantuan?",
     "giveToys": "Kapan ibu harus mulai memberi anak benda atau mainan yang bersih dan aman untuk dimasukkan ke mulut mereka?",
     "lookAtBooks": "Kapan ibu harus mulai melihat-lihat buku anak-anak bersama anak mereka?",
-    "play": "Kapan ibu harus mulai memberi anak benda-benda rumah tangga yang bersih dan aman untuk dipakai bermain?",
-
-    "birth": "Dalam kandungan atau saat lahir",
-    "2": "lahir sampai 2 bulan",
-    "4to5": "4-5 bulan",
-    "7to9": "7-9 bulan",
-    "9to14": "9-14 bulan"
+    "play": "Kapan ibu harus mulai memberi anak benda-benda rumah tangga yang bersih dan aman untuk dipakai bermain?"
   },
 
   "FCI": {
