@@ -106,14 +106,64 @@ function fci(err, convo, language) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
     if (/^intro*/gi.test(key)) {
-      convo.addMessage(
-        t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
-      return goto('fci');
+      return convo.addMessage({text: t(`${language}:FCI.${key}`, {childName}),
+                               action: 'fci'},
+                              'fci intro');
+    } else if (/^transition*/gi.test(key)) {
+      return convo.addMessage({text: t(`${language}:FCI.${key}`, {childName}),
+                               action: 'fci activities'},
+                              'fci');
     } else if (/count$/gi.test(key)) {
       return convo.addQuestion(t(`${language}:FCI.${key}`),
                                nextConversation,
                                {key},
                                'fci');
+    } else if (['read',
+                'narrate',
+                'sing',
+                'outing',
+                'play',
+                'nameCountOrDraw'].includes(key)) {
+      return convo.addQuestion(
+        generateButtonTemplate(
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
+          null,
+          [{title: t(`${language}:choices.yes`),
+            payload: 'yes'},
+           {title: t(`${language}:choices.no`),
+            payload: 'no'},
+           {title: t(`${language}:choices.idk`),
+            payload: 'idk'}]),
+        [{
+          pattern: 'yes',
+          callback: goto('fci optional'),
+        }, {
+          default: true,
+          callback: nextConversation,
+        }],
+        {key},
+        'fci activities');
+    } else if (/optional$/gi.test(key)) {
+      return convo.addQuestion(
+        generateButtonTemplate(
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
+          null,
+          [{title: t(`${language}:choices.yes`),
+            payload: 'yes'},
+           {title: t(`${language}:choices.no`),
+            payload: 'no'},
+           {title: t(`${language}:choices.idk`),
+            payload: 'idk'}]),
+          /^caregiver*/gi.test(key) ?
+          (res, conv) => {
+            conv.gotoThread('fci activities');
+            conv.next();
+          }
+        : nextConversation,
+        {key: key.replace(/optional$/gi, '')},
+        'fci optional');
     } else {
       return convo.addQuestion(
         generateButtonTemplate(
@@ -177,7 +227,7 @@ function pickConversation(err, convo, {language: lang, name}) {
       pattern: 'fci',
       callback: (res, conv) => {
         idString = getFormId('fci');
-        convo.gotoThread('fci');
+        convo.gotoThread('fci intro');
         convo.next();
       },
     }, {
@@ -194,9 +244,8 @@ function pickConversation(err, convo, {language: lang, name}) {
         convo.gotoThread('srq 20');
         convo.next();
       },
-    }], {
-      key: 'intro',
-    });
+    }],
+    {key: 'intro',});
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
