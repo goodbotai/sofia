@@ -13,7 +13,7 @@ facebook.setGreeting( 'Sofia is here to help with your ECD needs.');
 facebook.setGetStarted('get_started');
 facebook.setMenu([{
   locale: 'default',
-  composer_input_disabled: true,
+  composer_input_disabled: false,
   call_to_actions: [
     {
       title: 'Help',
@@ -50,7 +50,7 @@ facebook.setMenu([{
   ],
 }, {
   locale: 'id_ID',
-  composer_input_disabled: true,
+  composer_input_disabled: false,
   call_to_actions: [
     {
       title: 'Membantu',
