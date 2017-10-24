@@ -83,12 +83,64 @@ function caregiverKnowledge(err, convo) {
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
-      generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
-                         [t(`${language}:choices.birth`),
-                          t(`${language}:choices.2`),
-                          t(`${language}:choices.4to5`),
-                          t(`${language}:choices.7to9`),
-                          t(`${language}:choices.9to14`)]),
+        generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
+                           (() => {
+                             if (['brainDevelopment',
+                                  'sight',
+                                  'follow',
+                                  'vocalize',
+                                  'smile',
+                                  'speech',
+                                  'playWithToys',
+                                 'talkToKids'].includes(key)) {
+                               return [t(`${language}:choices.birth`),
+                                       t(`${language}:choices.2`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.9to14`)];
+                             } else if (['reachForToys'].includes(key)) {
+                               return [
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.10to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else if (['graspTinyThings',
+                                         'walkAlone'].includes(key)) {
+                               return [t(`${language}:choices.2to3`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.10to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else if (['practiceReaching'].includes(key)) {
+                               return [t(`${language}:choices.2`),
+                                       t(`${language}:choices.2to4`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.9to14`)];
+                             } else if (['teachCounting',
+                                         'teachColors',
+                                         'eatAlone',
+                                         'paperAndCrayons'].includes(key)) {
+                               return [t(`${language}:choices.9to12`),
+                                       t(`${language}:choices.12to15`),
+                                       t(`${language}:choices.15to24`),
+                                       t(`${language}:choices.2to3y`),
+                                       t(`${language}:choices.4to5y`)];
+                             } else if (['sitWithSupport'].includes(key)) {
+                               return [t(`${language}:choices.1to2`),
+                                       t(`${language}:choices.3to4`),
+                                       t(`${language}:choices.5to6`),
+                                       t(`${language}:choices.14to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else {
+                               return [t(`${language}:choices.1to3`),
+                                       t(`${language}:choices.4to6`),
+                                       t(`${language}:choices.9to10`),
+                                       t(`${language}:choices.14to15`),
+                                       t(`${language}:choices.15to24`)];
+                             }
+                           })()
+                         ),
       nextConversation,
       {key},
       'caregiver knowledge');
@@ -245,7 +297,7 @@ function pickConversation(err, convo, {language: lang, name}) {
         convo.next();
       },
     }],
-    {key: 'intro',});
+    {key: 'intro'});
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
