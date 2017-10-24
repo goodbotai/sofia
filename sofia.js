@@ -32,6 +32,8 @@ const enTranslation = JSON.parse(fs.readFileSync('translations/en.json'));
 
 // To remove
 const childName = 'your child';
+const motherName = 'mom';
+const fatherName = 'dad';
 const genderPronoun = 'she';
 /*
 const mockChild = {
@@ -81,12 +83,64 @@ function caregiverKnowledge(err, convo) {
       return goto('caregiver knowledge');
     } else {
       return convo.addQuestion(
-      generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
-                         [t(`${language}:choices.birth`),
-                          t(`${language}:choices.2`),
-                          t(`${language}:choices.4to5`),
-                          t(`${language}:choices.7to9`),
-                          t(`${language}:choices.9to14`)]),
+        generateQuickReply(t(`${language}:caregiverKnowledge.${key}`),
+                           (() => {
+                             if (['brainDevelopment',
+                                  'sight',
+                                  'follow',
+                                  'vocalize',
+                                  'smile',
+                                  'speech',
+                                  'playWithToys',
+                                 'talkToKids'].includes(key)) {
+                               return [t(`${language}:choices.birth`),
+                                       t(`${language}:choices.2`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.9to14`)];
+                             } else if (['reachForToys'].includes(key)) {
+                               return [
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.10to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else if (['graspTinyThings',
+                                         'walkAlone'].includes(key)) {
+                               return [t(`${language}:choices.2to3`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.10to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else if (['practiceReaching'].includes(key)) {
+                               return [t(`${language}:choices.2`),
+                                       t(`${language}:choices.2to4`),
+                                       t(`${language}:choices.4to5`),
+                                       t(`${language}:choices.7to9`),
+                                       t(`${language}:choices.9to14`)];
+                             } else if (['teachCounting',
+                                         'teachColors',
+                                         'eatAlone',
+                                         'paperAndCrayons'].includes(key)) {
+                               return [t(`${language}:choices.9to12`),
+                                       t(`${language}:choices.12to15`),
+                                       t(`${language}:choices.15to24`),
+                                       t(`${language}:choices.2to3y`),
+                                       t(`${language}:choices.4to5y`)];
+                             } else if (['sitWithSupport'].includes(key)) {
+                               return [t(`${language}:choices.1to2`),
+                                       t(`${language}:choices.3to4`),
+                                       t(`${language}:choices.5to6`),
+                                       t(`${language}:choices.14to15`),
+                                       t(`${language}:choices.15to24`)];
+                             } else {
+                               return [t(`${language}:choices.1to3`),
+                                       t(`${language}:choices.4to6`),
+                                       t(`${language}:choices.9to10`),
+                                       t(`${language}:choices.14to15`),
+                                       t(`${language}:choices.15to24`)];
+                             }
+                           })()
+                         ),
       nextConversation,
       {key},
       'caregiver knowledge');
@@ -104,13 +158,69 @@ function fci(err, convo, language) {
   const fciQuestionKeys = Object.keys(enTranslation.FCI);
   fciQuestionKeys.map((key) => {
     if (/^intro*/gi.test(key)) {
-      convo.addMessage(
-        t(`${language}:FCI.${key}`, {childName, genderPronoun}), 'fci');
-      return goto('fci');
+      return convo.addMessage({text: t(`${language}:FCI.${key}`, {childName}),
+                               action: 'fci'},
+                              'fci intro');
+    } else if (/^transition*/gi.test(key)) {
+      return convo.addMessage({text: t(`${language}:FCI.${key}`, {childName}),
+                               action: 'fci activities'},
+                              'fci');
+    } else if (/count$/gi.test(key)) {
+      return convo.addQuestion(t(`${language}:FCI.${key}`),
+                               nextConversation,
+                               {key},
+                               'fci');
+    } else if (['read',
+                'narrate',
+                'sing',
+                'outing',
+                'play',
+                'nameCountOrDraw'].includes(key)) {
+      return convo.addQuestion(
+        generateButtonTemplate(
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
+          null,
+          [{title: t(`${language}:choices.yes`),
+            payload: 'yes'},
+           {title: t(`${language}:choices.no`),
+            payload: 'no'},
+           {title: t(`${language}:choices.idk`),
+            payload: 'idk'}]),
+        [{
+          pattern: 'yes',
+          callback: goto('fci optional'),
+        }, {
+          default: true,
+          callback: nextConversation,
+        }],
+        {key},
+        'fci activities');
+    } else if (/optional$/gi.test(key)) {
+      return convo.addQuestion(
+        generateButtonTemplate(
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
+          null,
+          [{title: t(`${language}:choices.yes`),
+            payload: 'yes'},
+           {title: t(`${language}:choices.no`),
+            payload: 'no'},
+           {title: t(`${language}:choices.idk`),
+            payload: 'idk'}]),
+          /^caregiver*/gi.test(key) ?
+          (res, conv) => {
+            conv.gotoThread('fci activities');
+            conv.next();
+          }
+        : nextConversation,
+        {key: key.replace(/optional$/gi, '')},
+        'fci optional');
     } else {
       return convo.addQuestion(
         generateButtonTemplate(
-          t(`${language}:FCI.${key}`, {childName, genderPronoun}),
+          t(`${language}:FCI.${key}`,
+            {childName, genderPronoun, motherName, fatherName}),
           null,
           [{title: t(`${language}:choices.yes`),
             payload: 'yes'},
@@ -169,7 +279,7 @@ function pickConversation(err, convo, {language: lang, name}) {
       pattern: 'fci',
       callback: (res, conv) => {
         idString = getFormId('fci');
-        convo.gotoThread('fci');
+        convo.gotoThread('fci intro');
         convo.next();
       },
     }, {
@@ -186,9 +296,8 @@ function pickConversation(err, convo, {language: lang, name}) {
         convo.gotoThread('srq 20');
         convo.next();
       },
-    }], {
-      key: 'intro',
-    });
+    }],
+    {key: 'intro'});
 
   convo.on('end', function(convo) {
     if (convo.status=='completed' || convo.status=='interrupted') {
