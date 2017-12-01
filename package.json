@@ -2,13 +2,13 @@
   "name": "sofia",
   "version": "0.0.1-alpha.1",
   "description": "A bot to track and access ECD progress.",
-  "main": "sofia.js",
+  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint sofia.js",
-    "dev": "supervisor sofia.js",
+    "lint": "./node_modules/.bin/eslint index.js",
+    "dev": "supervisor index.js",
     "travis-ecs-deploy": "travis-ecs-deploy"
   },
   "repository": {
