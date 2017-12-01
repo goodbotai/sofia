@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/goodbotai/sofia#readme",
   "dependencies": {
-    "borq": "^0.0.1-alpha.19",
+    "borq": "0.0.1-alpha.26",
     "express-winston": "^2.4.0",
     "i18next": "^9.0.0",
     "i18next-express-middleware": "^1.0.5",
