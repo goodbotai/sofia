@@ -55,7 +55,9 @@ facebook.controller.hears(
     services.getUser({urn: `facebook:${message.user}`})
     .then(
       ({results: [{language}]}) => {
-        bot.reply(message, t(`${language}:utils.quitMessage`));
+        bot.reply(
+          message,
+          t(`${localeUtils.lookupISO6391(language)}:utils.quitMessage`));
       })
       .catch((err) => bot.reply(message, t(`${lang}:utils.quitMessage`)));
   }
@@ -68,7 +70,8 @@ facebook.controller.hears(
     services.getUser({urn: `facebook:${message.user}`})
     .then(
       ({results: [{language}]}) => {
-        bot.reply(message, t(`${language}:utils.idkw`));
+        bot.reply(message,
+                  t(`${localeUtils.lookupISO6391(language)}:utils.idkw`));
       })
       .catch((err) => bot.reply(message, t(`${lang}:utils.idkw`)));
   }
