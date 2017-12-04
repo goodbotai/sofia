@@ -1,5 +1,5 @@
 ﻿{
-  "generic": {
+  "utils": {
     "helpMessage": "Halo. Saya Sofia. Saya akan membantu Anda terkait kebutuhan tumbuh kembang anak. Apa Anda ingin memulai surveinya sekarang?",
     "quitMessage": "Apa Anda yakin ingin berhenti?",
     "languageChangeText": "Oke, ganti bahasa.",

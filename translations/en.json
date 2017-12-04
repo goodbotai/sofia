@@ -1,5 +1,5 @@
 {
-  "generic": {
+  "utils": {
     "helpMessage": "Hey there. I'm Sofia. Here to help with your ECD needs. Do you want to start a survey right now?",
     "quitMessage": "Bye.\nYou can start me up again by sending me a \"hello\".",
     "languageChangeText": "Okay, changing language.",
@@ -10,7 +10,9 @@
     "major":"This is always a major issue.",
     "minor": "This is a mild issue.",
     "nonIssue": "This is not an issue.",
-    "outro": "Thank you and goodbye."
+    "outro": "Thank you and goodbye.",
+    "yes": "Yes",
+    "no": "No"
   },
 
   "choices": {
