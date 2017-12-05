@@ -141,9 +141,25 @@
     "intro3": "If you feel unsure about a question, please give the best answer you can. I want to reassure you that your answers are confidential.",
 
       "refuseFood": "Does {{{childName}}} refuse to eat?",
+      "refuseFood0": "This is not an issue, the child eats all foods and is happy to eat. The odd exception is okay, for example if the child has certain specific dislikes.",
+      "refuseFood1": "This is a mild issue, the child sometimes refuses different types of foods but not always. The child needs some managing at mealtimes.",
+      "refuseFood2": "This is always a major issue. The child runs away at the sight of food, the child has to be forced to eat at every meal, the child may spit food out.",
+
       "troubleSleeping": "Does {{{childName}}} have trouble falling asleep?",
+      "troubleSleeping0": "The child has no trouble falling asleep. The child requires no intervention.",
+      "troubleSleeping1": "The child can have trouble falling asleep once in a while. The child may require some special intervention from time to time.",
+      "troubleSleeping2": "The child has trouble falling asleep every night. The child requires a special and extensive routine to go to sleep.",
+
       "quarrelsome": "Is {{{childName}}} quarrelsome?",
+      "quarrelsome0": "",
+      "quarrelsome1": "",
+      "quarrelsome2": "",
+
       "play": "Does {{{childName}}} play well with other children (not including siblings)?",
+      "play0": "",
+      "play1": "",
+      "play2": "",
+      
       "hit": "Does {{{childName}}} hit, shove, kick, or bite children (not including siblings)?",
       "showJealousy": "Does {{{childName}}} show jealousy?",
       "share": "Does {{{childName}}} share, for example food, space, clothes, or toys?",
